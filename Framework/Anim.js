@@ -1,12 +1,11 @@
 class Anim
 {
-	constructor( sprName,nSprs,fps = 4,sprSuffix = ".png" )
+	constructor( sprArr,fps = 4 )
 	{
-		this.sprs = []
-		for( let i = 0; i < nSprs; ++i ) this.sprs.push( new Sprite( sprName + ( i + 1 ) + sprSuffix ) )
+		this.sprs = sprArr
 		
 		this.frameTimer = new Timer( 1.0 / fps )
-		this.curFrame = new Counter( nSprs )
+		this.curFrame = new Counter( sprArr.length )
 	}
 	
 	Update()
@@ -33,4 +32,20 @@ class Anim
 	{
 		return( this.sprs[0].size )
 	}
+	
+	Loaded()
+	{
+		for( const spr of this.sprs )
+		{
+			if( !spr.loaded ) return( false )
+		}
+		return( true )
+	}
+}
+
+Anim.GenSprArr = function( sprName,nSprs,sprSuffix = ".png" )
+{
+	const sprs = []
+	for( let i = 0; i < nSprs; ++i ) sprs.push( new Sprite( sprName + ( i + 1 ) + sprSuffix ) )
+	return( sprs )
 }

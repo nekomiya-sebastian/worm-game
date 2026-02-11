@@ -23,11 +23,8 @@ class Mouse
 			const boundingRect = canv.getBoundingClientRect()
 			const docElement = document.documentElement
 			
-			const tempX = e.clientX - boundingRect.left - docElement.scrollLeft
-			const tempY = e.clientY - boundingRect.top - docElement.scrollTop
-			
-			self.x = Math.floor( tempX / gfx.scale )
-			self.y = Math.floor( tempY / gfx.scale )
+			self.x = e.clientX - boundingRect.left - docElement.scrollLeft
+			self.y = e.clientY - boundingRect.top - docElement.scrollTop
 		} )
 	}
 }

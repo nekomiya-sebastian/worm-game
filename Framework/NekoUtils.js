@@ -17,7 +17,12 @@ NekoUtils.RandFloat = function( min,max )
 
 NekoUtils.Choose = function()
 {
-	return( NekoUtils.RandFloat( 0,1 ) < 0.5 )
+	return( NekoUtils.Chance( 0.5 ) )
+}
+
+NekoUtils.Chance = function( chance )
+{
+	return( NekoUtils.RandFloat( 0,1 ) < chance )
 }
 
 NekoUtils.ArrayChooseRand = function( arr )
