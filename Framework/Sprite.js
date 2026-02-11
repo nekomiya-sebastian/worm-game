@@ -1,0 +1,29 @@
+class Sprite
+{
+	constructor( path )
+	{
+		this.sprite = new Image()
+		this.sprite.src = path
+		this.size = Vec2.Zero()
+		
+		this.loaded = false
+		
+		const self = this
+		this.sprite.onload = function()
+		{
+			self.size.x = self.sprite.width
+			self.size.y = self.sprite.height
+			self.loaded = true
+		}
+		this.sprite.onerror = function()
+		{
+			NekoUtils.Assert( false,"Sprite failed to load! " + path )
+			self.loaded = false
+		}
+	}
+	
+	Draw( x,y,gfx,flipped = false,scale = gfx.sprScale )
+	{
+		gfx.DrawSprite( x,y,this,flipped,scale )
+	}
+}
