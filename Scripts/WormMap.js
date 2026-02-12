@@ -21,13 +21,8 @@ class WormMap
 		this.worms = []
 	}
 	
-	Update( mouse )
+	Update( mouse,shop )
 	{
-		for( const worm of this.worms )
-		{
-			if( worm.Update( mouse,this.canClick ) ) this.canClick = false
-		}
-		
 		if( this.loadedTiles )
 		{
 			if( mouse.down )
@@ -37,10 +32,18 @@ class WormMap
 					const tileX = Math.floor( mouse.x / this.tileSize.x )
 					const tileY = Math.floor( mouse.y / this.tileSize.y )
 					const curTile = this.tiles[tileY * this.width + tileX]
-					if( curTile > 1 ) --this.tiles[tileY * this.width + tileX]
+					if( curTile > 1 )
+					{
+						--this.tiles[tileY * this.width + tileX]
+						this.canClick = false
+					}
 				}
-				
-				this.canClick = false
+			}
+			
+			for( const worm of this.worms )
+			{
+				if( worm.Update( mouse,this.canClick,shop ) ) this.canClick = false
+				if( this.GetTile( worm.wormTile.x,worm.wormTile.y ) == 1 ) worm.Uncover()
 			}
 		}
 		
@@ -86,7 +89,7 @@ class WormMap
 	{
 		this.tileSize = new Vec2( this.tileSprs[0].size.x,this.tileSprs[0].size.y ).Scale( gfx.sprScale )
 		this.width = gfx.width / this.tileSize.x
-		this.height = gfx.height / this.tileSize.y
+		this.height = gfx.height / this.tileSize.y - 1
 		
 		// console.log( "dims: " + this.width + "," + this.height )
 		// console.log( "tileSize: " + this.tileSize.x + "," + this.tileSize.y )
@@ -105,7 +108,7 @@ class WormMap
 				{
 					const wormPos = new Vec2( x * this.tileSize.x,y * this.tileSize.y )
 						.Add( this.tileSize.Copy().Divide( 2 ) )
-					this.worms.push( new MapWorm( wormPos,NekoUtils.Choose(),new Vec2( x,y ) ) )
+					this.worms.push( new MapWorm( wormPos,NekoUtils.Choose(),new Vec2( x,y ),gfx ) )
 				}
 			}
 		}

@@ -8,15 +8,21 @@ class Mouse
 		this.x = 0
 		this.y = 0
 		
+		this.usingTouch = false
+		
 		const self = this
 		
 		canv.addEventListener( "mousedown",function()
 		{
 			self.down = true
+			
+			this.usingTouch = false
 		} )
 		canv.addEventListener( "mouseup",function()
 		{
 			self.down = false
+			
+			this.usingTouch = false
 		} )
 		canv.addEventListener( "mousemove",function( e )
 		{
@@ -25,6 +31,27 @@ class Mouse
 			
 			self.x = e.clientX - boundingRect.left - docElement.scrollLeft
 			self.y = e.clientY - boundingRect.top - docElement.scrollTop
+			
+			this.usingTouch = false
+		} )
+		
+		canv.addEventListener( "touchStart",function( e )
+		{
+			self.touchX = e.clientX - boundingRect.left - docElement.scrollLeft
+			self.touchY = e.clientY - boundingRect.top - docElement.scrollTop
+			
+			self.down = true
+			
+			this.usingTouch = true
+		} )
+		canv.addEventListener( "touchEnd",function( e )
+		{
+			self.touchX = e.clientX - boundingRect.left - docElement.scrollLeft
+			self.touchY = e.clientY - boundingRect.top - docElement.scrollTop
+			
+			self.down = false
+			
+			this.usingTouch = true
 		} )
 	}
 }
