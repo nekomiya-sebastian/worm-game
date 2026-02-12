@@ -33,7 +33,9 @@ class MapWorm
 		{
 			this.loaded = true
 			this.hitbox = new Hitbox( this.pos.x,this.pos.y,
-				this.wormAnim.GetSize().x * Graphics.sprScale,this.wormAnim.GetSize().y * Graphics.sprScale )
+				this.wormAnim.GetSize().x * Graphics.sprScale,
+				this.wormAnim.GetSize().y * Graphics.sprScale )
+				.Expand( MapWorm.hitboxExpandAmount )
 		}
 		
 		this.wormAnim.Update( dt )
@@ -45,6 +47,8 @@ class MapWorm
 	{
 		if( this.loaded && !this.collected )
 		{
+			// this.hitbox.Draw( gfx )
+			
 			this.wormAnim.Draw(
 				this.pos.Copy().Subtract( this.wormAnim.GetSize().Copy().Divide( 2 ).Scale( gfx.sprScale ) ),
 				gfx,this.flipped )
@@ -58,3 +62,4 @@ class MapWorm
 }
 
 MapWorm.wormSprArr = Anim.GenSprArr( "Images/Worm",2 )
+MapWorm.hitboxExpandAmount = 15 * Graphics.sprScale

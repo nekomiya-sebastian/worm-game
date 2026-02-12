@@ -1,3 +1,100 @@
+class WormBuyItem
+{
+	constructor( anim,costs,pos,upgradeInd,additionalSpr = null )
+	{
+		this.anim = anim
+		this.costs = costs
+		this.cur = 0
+		this.show = false
+		this.maxed = false
+		this.hitbox = null
+		this.pos = pos
+		this.upgradeInd = upgradeInd
+		this.additionalSpr = additionalSpr
+	}
+	
+	Update( mouse,nWorms,canClick,dt,map )
+	{
+		const canPurchase = nWorms >= this.costs[this.cur]
+		if( !this.maxed && canPurchase )
+		{
+			this.anim.Update( dt )
+			
+			if( this.hitbox != null )
+			{
+				// check click for upgrade
+				if( mouse.down && ( canClick || mouse.usingTouch ) &&
+					canPurchase &&
+					this.hitbox.Contains( mouse.x,mouse.y ) )
+				{
+					const spent = this.costs[this.cur]
+					++this.cur
+					this.Purchase( map )
+					
+					return( spent )
+				}
+			}
+			else if( this.anim.Loaded() && this.pos != null && this.hitbox == null )
+			{
+				this.hitbox = new Hitbox( this.pos.x,this.pos.y,
+					this.anim.GetSize().x * Graphics.sprScale,
+					this.anim.GetSize().y * Graphics.sprScale,
+					false )
+			}
+		}
+		
+		return( 0 )
+	}
+	
+	Draw( gfx,map,numDrawer )
+	{
+		if( this.show && !this.maxed && this.anim.Loaded() )
+		{
+			// if( this.hitbox != null ) this.hitbox.Draw( gfx )
+			
+			this.anim.Draw( this.pos,gfx )
+			
+			numDrawer.DrawNum( this.costs[this.cur],
+				new Vec2( this.pos.x + this.anim.GetSize().x / 2 * gfx.sprScale,
+				gfx.height - 6 * gfx.sprScale ),
+				gfx,true,false )
+		
+			switch( this.upgradeInd )
+			{
+				case 1: // draw x2 for 2x worm chance upgrade
+					if( this.additionalSpr.loaded )
+					{
+						this.additionalSpr.Draw( this.pos.x + gfx.sprScale * 5,this.pos.y,gfx )
+					}
+					break
+			}
+		}
+	}
+	
+	Purchase( map )
+	{
+		const moreWormPercentAdd = 0.2
+		switch( this.upgradeInd )
+		{
+			case 0:
+				map.SpawnSeal()
+				break;
+			case 1:
+				map.BuffWormDensity( moreWormPercentAdd )
+				break;
+		}
+	}
+	
+	CheckVisible( nWorms )
+	{
+		if( !this.show && nWorms >= this.costs[0] * WormBuyItem.upgradeVisiblePercent )
+		{
+			this.show = true
+		}
+	}
+}
+WormBuyItem.upgradeVisiblePercent = 0.5 // if you have cost * this amount you can at least see the upgrade
+
 class WormShop
 {
 	constructor( gfx,map,numDrawer )
@@ -5,21 +102,27 @@ class WormShop
 		this.map = map
 		this.numDrawer = numDrawer
 		
-		this.nWorms = 0
+		this.nWorms = 999
 		this.maxWorms = 999999
 		
 		this.wormCountAnim = new Anim( MapWorm.wormSprArr,12 )
 		this.wormAddAnimUpdateTimer = new Timer( 0.7,true )
 		
-		this.upgradeVisiblePercent = 0.5 // if you have cost * this amount you can at least see the upgrade
-		
-		this.sealAnim = new Anim( BouncingSeal.sealSprArr,BouncingSeal.sealAnimFPS )
-		this.sealCosts = [ 15,50,120,350,600,1000 ]
-		this.curSeal = 0
-		this.showSeal = false
-		this.maxedSeal = false
-		this.sealHitbox = null
-		this.sealPos = null
+		this.buyItems = [
+			new WormBuyItem(
+				new Anim( BouncingSeal.sealSprArr,BouncingSeal.sealAnimFPS ),
+				[ 15,50,120,350,600,1000 ],
+				new Vec2( map.tileSize.x * 1.5,gfx.height - map.tileSize.y ),
+				0
+			),
+			new WormBuyItem(
+				new Anim( MapWorm.wormSprArr,2 ),
+				[ 100,150,500,2000 ],
+				new Vec2( map.tileSize.x * 3,gfx.height - map.tileSize.y + 5 * Graphics.sprScale ),
+				1,
+				new Sprite( "Images/x2.png" )
+			)
+		]
 		
 		this.canClick = false
 	}
@@ -31,29 +134,14 @@ class WormShop
 			this.wormCountAnim.Update( dt )
 		}
 		
-		if( !this.maxedSeal && this.nWorms >= this.sealCosts[this.curSeal] )
+		for( const buyItem of this.buyItems )
 		{
-			this.sealAnim.Update( dt )
+			const spent = buyItem.Update( mouse,this.nWorms,this.canClick,dt,this.map )
 			
-			if( this.sealHitbox != null )
+			if( spent > 0 )
 			{
-				// check click for seal upgrade
-				if( mouse.down && ( this.canClick || mouse.usingTouch ) &&
-					this.nWorms > this.sealCosts[this.curSeal] &&
-					this.sealHitbox.Contains( mouse.x,mouse.y ) )
-				{
-					this.nWorms -= this.sealCosts[this.curSeal]
-					++this.curSeal
-					this.map.SpawnSeal()
-					this.canClick = false
-				}
-			}
-			else if( this.sealAnim.Loaded() && this.sealPos != null )
-			{
-				this.sealHitbox = new Hitbox( this.sealPos.x,this.sealPos.y,
-					this.sealAnim.GetSize().x * Graphics.sprScale,
-					this.sealAnim.GetSize().y * Graphics.sprScale,
-					false )
+				this.canClick = false
+				this.nWorms -= spent
 			}
 		}
 		
@@ -76,19 +164,9 @@ class WormShop
 				this.numDrawer.DrawNum( this.nWorms,
 					new Vec2( tileSize.x / 2,gfx.height - tileSize.y + 9.5 * gfx.sprScale ),
 					gfx,true,false )
-				
-				if( this.showSeal && !this.maxedSeal && this.sealAnim.Loaded() )
-				{
-					this.sealPos = new Vec2( tileSize.x * 1.5,gfx.height - tileSize.y )
-					this.sealAnim.Draw( this.sealPos,gfx )
-					
-					this.numDrawer.DrawNum( this.sealCosts[this.curSeal],
-						new Vec2( this.sealPos.x + this.sealAnim.GetSize().x / 2 * gfx.sprScale,
-						gfx.height - 6 * gfx.sprScale ),
-						gfx,true,false )
-					// if( this.sealHitbox != null ) this.sealHitbox.Draw( gfx )
-				}
 			}
+			
+			for( const buyItem of this.buyItems ) buyItem.Draw( gfx,this.map,this.numDrawer )
 		}
 	}
 	
@@ -98,9 +176,6 @@ class WormShop
 		
 		if( this.nWorms < this.maxWorms ) ++this.nWorms
 		
-		if( !this.showSeal && this.nWorms >= this.sealCosts[0] * this.upgradeVisiblePercent )
-		{
-			this.showSeal = true
-		}
+		for( const buyItem of this.buyItems ) buyItem.CheckVisible( this.nWorms )
 	}
 }

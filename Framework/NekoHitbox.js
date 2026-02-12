@@ -48,4 +48,14 @@ class Hitbox
 	{
 		
 	}
+	
+	Expand( amount )
+	{
+		// this.x -= amount
+		// this.y -= amount
+		this.width += amount
+		this.height += amount
+		
+		return( this )
+	}
 }

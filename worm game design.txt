@@ -10,20 +10,13 @@ worm game design
 	or maybe you have to press a bit "reset" button?
 different level layouts - get x worms to progress to the next level
 	like dirt is arranged in a different way, some tiles take multiple hits to break like stone, etc
-	-/first level is a giant worm on a dirt floor
---use worms to buy seals that bounce around & break tiles for you
---	maybe they just bounce around like bouncy worm
---		check each corner for tile collision
---			bounce based on diff from tile center to seal center
 "buy" text/green button on top of seal to make it obvious you gotta click it
 upgrade ideas
-	cat that shoots lasers that breaks tiles
-	*2 worms in level - up to 100% (every tile)
-		symbol is worm sprite with a "x2" drawn on top of it
-	something to automatically collect worms for you
+	nekosaurus rex that shoots lasers that breaks tiles
+	cat to automatically collect worms for you
+		walks towards worms, either pathfinds or breaks tiles in the way
+			I prefer not breaking tiles since later levels may have really thick layered like stone tiles
+			or dashes to leap on the worm, ignoring any collisions in the way
 level ideas
 	fox head level
-
-make it playable on phone - tall aspect ratio, make sure tapping works
-	can even test on phone with github pages link
 

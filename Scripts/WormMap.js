@@ -12,10 +12,11 @@ class WormMap
 		
 		this.tiles = []
 		this.loadedTiles = false
+		this.loadFlip = false
 		
 		this.width = -1
 		this.height = -1
-		this.tileSize = -1
+		this.tileSize = new Vec2( 24,24 ).Scale( Graphics.sprScale )
 		
 		this.canClick = false
 		
@@ -98,7 +99,7 @@ class WormMap
 	
 	InitLoadTiles( gfx )
 	{
-		this.tileSize = new Vec2( this.tileSprs[0].size.x,this.tileSprs[0].size.y ).Scale( gfx.sprScale )
+		// this.tileSize = new Vec2( this.tileSprs[0].size.x,this.tileSprs[0].size.y ).Scale( gfx.sprScale )
 		this.width = gfx.width / this.tileSize.x
 		this.height = gfx.height / this.tileSize.y - 1
 		
@@ -119,15 +120,15 @@ class WormMap
 		NekoUtils.Assert( level.length == this.height,"Invalid level height!" )
 		
 		this.tiles = []
+		for( let i = 0; i < this.width * this.height; ++i ) this.tiles.push( 0 )
 		
-		let x = 0
-		let y = 0
-		for( const line of level )
+		for( let y = 0; y < level.length; ++y )
 		{
-			for( const letter of line )
+			const line = level[y]
+			for( let x = 0; x < line.length; ++x )
 			{
-				const curTile = parseInt( letter )
-				this.tiles.push( curTile )
+				const curTile = parseInt( line[( this.loadFlip ? line.length - x - 1 : x )] )
+				this.SetTile( x,y,curTile )
 				
 				if( curTile > 1 && NekoUtils.Chance( this.wormDensity ) )
 				{
@@ -135,15 +136,17 @@ class WormMap
 						.Add( this.tileSize.Copy().Divide( 2 ) )
 					this.worms.push( new MapWorm( wormPos,NekoUtils.Choose(),new Vec2( x,y ) ) )
 				}
-				
-				++x
 			}
-			
-			x = 0
-			++y
 		}
 		
+		// respawn seals to position them on free tiles
+		const nSeals = this.seals.length
+		this.seals = []
+		for( let i = 0; i < nSeals; ++i ) this.SpawnSeal()
+		
 		// console.log( "x: " + x + ", y: " + y + ", width: " + this.width + ", height: " + this.height )
+		
+		this.loadFlip = !this.loadFlip
 	}
 	
 	CheckResetLevel()
@@ -183,12 +186,27 @@ class WormMap
 		this.seals.push( new BouncingSeal( spawnSpot ) )
 	}
 	
+	BuffWormDensity( amount )
+	{
+		this.wormDensity += amount
+		this.worms = []
+		this.LoadLevel()
+	}
+	
 	BreakTile( x,y )
 	{
 		if( this.GetTile( x,y ) > 1 )
 		{
 			--this.tiles[y * this.width + x]
 		}
+	}
+	
+	SetTile( x,y,tile )
+	{
+		NekoUtils.Assert( x >= 0 && x < this.width && y >= 0 && y < this.height,
+			"Invalid WormMap.SetTile coordinates! " + x + "," + y )
+		
+		this.tiles[y * this.width + x] = tile
 	}
 	
 	GetTile( x,y )
