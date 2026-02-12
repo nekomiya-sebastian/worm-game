@@ -21,25 +21,25 @@ class WormMap
 		
 		this.wormDensity = 0.3
 		this.worms = []
+		
+		this.seals = []
 	}
 	
-	Update( mouse,shop,dt )
+	Update( mouse,shop,dt,gfx )
 	{
 		if( this.loadedTiles )
 		{
-			if( mouse.down )
+			if( mouse.down && this.canClick &&
+				mouse.x >= 0 && mouse.x < this.GetWorldWidth() &&
+				mouse.y >= 0 && mouse.y < this.GetWorldHeight() )
 			{
-				if( this.canClick )
+				const curTile = this.GetTileWorld( new Vec2( mouse.x,mouse.y ) )
+				if( curTile > 1 )
 				{
-					const tileX = Math.floor( mouse.x / this.tileSize.x )
-					const tileY = Math.floor( mouse.y / this.tileSize.y )
-					const curTile = this.tiles[tileY * this.width + tileX]
-					if( curTile > 1 )
-					{
-						--this.tiles[tileY * this.width + tileX]
-						this.canClick = false
-						this.CheckResetLevel()
-					}
+					const tilePos = this.World2TilePos( new Vec2( mouse.x,mouse.y ) )
+					--this.tiles[tilePos.y * this.width + tilePos.x]
+					this.canClick = false
+					this.CheckResetLevel()
 				}
 			}
 			
@@ -52,6 +52,8 @@ class WormMap
 				}
 				if( this.GetTile( worm.wormTile.x,worm.wormTile.y ) == 1 ) worm.Uncover()
 			}
+			
+			for( const seal of this.seals ) seal.Update( dt,this )
 		}
 		
 		if( !mouse.down ) this.canClick = true
@@ -75,6 +77,8 @@ class WormMap
 			{
 				if( this.GetTile( worm.wormTile.x,worm.wormTile.y ) == 1 ) worm.Draw( gfx )
 			}
+			
+			for( const seal of this.seals ) seal.Draw( gfx )
 		}
 		else
 		{
@@ -160,11 +164,69 @@ class WormMap
 		this.LoadLevel()
 	}
 	
+	SpawnSeal()
+	{
+		const spawnableTiles = []
+		for( let y = 0; y < this.height; ++y )
+		{
+			for( let x = 0; x < this.width; ++x )
+			{
+				if( this.GetTile( x,y ) == 0 ) spawnableTiles.push( new Vec2( x,y ) )
+			}
+		}
+		NekoUtils.Assert( spawnableTiles.length > 0,"No spawnable tiles found!" )
+		let spawnTile = new Vec2( this.width / 2,this.height / 2 )
+		if( spawnableTiles.length > 0 ) spawnTile = NekoUtils.ArrayChooseRand( spawnableTiles )
+		
+		const spawnSpot = this.Tile2WorldPos( spawnTile.x,spawnTile.y,true )
+		
+		this.seals.push( new BouncingSeal( spawnSpot ) )
+	}
+	
+	BreakTile( x,y )
+	{
+		if( this.GetTile( x,y ) > 1 )
+		{
+			--this.tiles[y * this.width + x]
+		}
+	}
+	
 	GetTile( x,y )
 	{
 		NekoUtils.Assert( x >= 0 && x < this.width && y >= 0 && y < this.height,
 			"Invalid WormMap.GetTile coordinates! " + x + "," + y )
 		
 		return( this.tiles[y * this.width + x] )
+	}
+	
+	GetTileWorld( pos )
+	{
+		const tilePos = this.World2TilePos( pos )
+		return( this.GetTile( tilePos.x,tilePos.y ) )
+	}
+	
+	World2TilePos( pos )
+	{
+		return( new Vec2(
+			Math.floor( pos.x / this.tileSize.x ),
+			Math.floor( pos.y / this.tileSize.y )
+		) )
+	}
+	
+	Tile2WorldPos( x,y,centered = false )
+	{
+		const worldPos = new Vec2( x * this.tileSize.x,y * this.tileSize.y )
+		if( centered ) worldPos.Add( this.tileSize.Copy().Divide( 2 ) )
+		return( worldPos )
+	}
+	
+	GetWorldWidth()
+	{
+		return( this.width * this.tileSize.x )
+	}
+	
+	GetWorldHeight()
+	{
+		return( this.height * this.tileSize.y )
 	}
 }

@@ -16,7 +16,7 @@ class Button extends Hitbox
 		this.down = mouse.down
 		if( mouse.down )
 		{
-			if( this.hovering ) this.pressed = true
+			if( this.hovering || mouse.usingTouch ) this.pressed = true
 			
 			this.hovering = false
 		}

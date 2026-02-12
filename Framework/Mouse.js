@@ -12,9 +12,6 @@ class Mouse
 		
 		const self = this
 		
-		const boundingRect = canv.getBoundingClientRect()
-		const docElement = document.documentElement
-		
 		canv.addEventListener( "mousedown",function()
 		{
 			self.down = true
@@ -29,14 +26,22 @@ class Mouse
 		} )
 		canv.addEventListener( "mousemove",function( e )
 		{
+			const boundingRect = canv.getBoundingClientRect()
+			const docElement = document.documentElement
+			
 			self.x = e.clientX - boundingRect.left - docElement.scrollLeft
 			self.y = e.clientY - boundingRect.top - docElement.scrollTop
 			
 			this.usingTouch = false
 		} )
 		
-		canv.addEventListener( "touchStart",function( e )
+		canv.addEventListener( "touchstart",function( e )
 		{
+			e.preventDefault()
+			
+			const boundingRect = canv.getBoundingClientRect()
+			const docElement = document.documentElement
+			
 			self.x = e.touches[0].clientX - boundingRect.left - docElement.scrollLeft
 			self.y = e.touches[0].clientY - boundingRect.top - docElement.scrollTop
 			
@@ -44,8 +49,13 @@ class Mouse
 			
 			this.usingTouch = true
 		} )
-		canv.addEventListener( "touchEnd",function( e )
+		canv.addEventListener( "touchend",function( e )
 		{
+			e.preventDefault()
+			
+			const boundingRect = canv.getBoundingClientRect()
+			const docElement = document.documentElement
+			
 			self.x = e.touches[0].clientX - boundingRect.left - docElement.scrollLeft
 			self.y = e.touches[0].clientY - boundingRect.top - docElement.scrollTop
 			

@@ -43,7 +43,7 @@ class MapWorm
 	
 	Draw( gfx )
 	{
-		if( this.wormAnim.Loaded() && !this.collected )
+		if( this.loaded && !this.collected )
 		{
 			this.wormAnim.Draw(
 				this.pos.Copy().Subtract( this.wormAnim.GetSize().Copy().Divide( 2 ).Scale( gfx.sprScale ) ),

@@ -19,7 +19,7 @@ class Main
 	
 	Update( dt )
 	{
-		this.map.Update( this.mouse,this.shop,dt )
+		this.map.Update( this.mouse,this.shop,dt,this.gfx )
 		
 		// this.worm.Update( this.gfx )
 		
@@ -44,6 +44,8 @@ setInterval( function()
 	const now = Date.now()
 	const dt = ( now - prevTime ) / 30
 	prevTime = now
+	
+	if( dt > 5 ) return // prevent rubber banding from tabbing out
 	
 	main.Update( dt )
 	main.gfx.DrawRect( 0,0,main.gfx.width,main.gfx.height,"#000000" )
