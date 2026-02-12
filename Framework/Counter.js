@@ -18,6 +18,13 @@ class Counter
 		this.cur = 0
 	}
 	
+	SetCurItem( item )
+	{
+		NekoUtils.Assert( item >= 0 && item < this.count,
+			"Counter.SetCurItem given out of bounds value! " + item )
+		this.cur = item
+	}
+	
 	IsDone()
 	{
 		return( this.cur >= this.count )
@@ -26,5 +33,10 @@ class Counter
 	GetCurItem()
 	{
 		return( this.cur )
+	}
+	
+	GetCount()
+	{
+		return( this.count )
 	}
 }

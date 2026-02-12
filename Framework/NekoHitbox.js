@@ -46,7 +46,13 @@ class Hitbox
 	
 	Overlaps( otherHitbox )
 	{
+		const x = this.x - ( this.centered ? this.width / 2 : 0 )
+		const y = this.y - ( this.centered ? this.height / 2 : 0 )
+		const otherX = otherHitbox.x - ( otherHitbox.centered ? otherHitbox.width / 2 : 0 )
+		const otherY = otherHitbox.y - ( otherHitbox.centered ? otherHitbox.height / 2 : 0 )
 		
+		return( x + this.width > otherX && x < otherX + otherHitbox.width &&
+			y + this.height > otherY && y < otherY + otherHitbox.height )
 	}
 	
 	Expand( amount )
@@ -57,5 +63,10 @@ class Hitbox
 		this.height += amount
 		
 		return( this )
+	}
+	
+	GetSize()
+	{
+		return( new Vec2( this.width,this.height ) )
 	}
 }

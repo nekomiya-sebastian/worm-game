@@ -8,8 +8,6 @@ class Main
 		
 		this.numDrawer = new NumberDrawer( this.gfx )
 		
-		// this.worm = new BouncingWorm( this.gfx )
-		
 		this.levels = new WormLevels()
 		
 		this.map = new WormMap( this.levels )
@@ -21,8 +19,6 @@ class Main
 	{
 		this.map.Update( this.mouse,this.shop,dt,this.gfx )
 		
-		// this.worm.Update( this.gfx )
-		
 		this.shop.Update( this.mouse,dt )
 	}
 	
@@ -31,8 +27,6 @@ class Main
 		this.map.Draw( this.gfx )
 		
 		this.shop.Draw( this.gfx )
-		
-		// this.worm.Draw( this.gfx )
 	}
 }
 

@@ -28,6 +28,13 @@ class Anim
 		this.curFrame.Reset()
 	}
 	
+	SetFrame( frame )
+	{
+		NekoUtils.Assert( frame >= 0 && frame < this.curFrame.GetCount(),
+			"Anim.SetFrame given invalid frame index! " + frame )
+		this.curFrame.SetCurItem( frame )
+	}
+	
 	GetSize()
 	{
 		return( this.sprs[0].size )

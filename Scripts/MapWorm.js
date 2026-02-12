@@ -23,8 +23,7 @@ class MapWorm
 				!this.collected && !this.covered && canClick )
 			{
 				// collect worm on click
-				shop.GetWorm()
-				this.collected = true
+				this.Collect( shop )
 				
 				return( true )
 			}
@@ -58,6 +57,15 @@ class MapWorm
 	Uncover()
 	{
 		this.covered = false
+	}
+	
+	Collect( shop )
+	{
+		if( !this.collected )
+		{
+			shop.GetWorm()
+			this.collected = true
+		}
 	}
 }
 

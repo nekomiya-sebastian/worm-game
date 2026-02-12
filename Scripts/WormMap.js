@@ -20,16 +20,21 @@ class WormMap
 		
 		this.canClick = false
 		
+		this.levelResetCheckTimer = new Timer( 1.0 )
+		
 		this.wormDensity = 0.3
 		this.worms = []
 		
 		this.seals = []
+		this.cats = []
 	}
 	
 	Update( mouse,shop,dt,gfx )
 	{
 		if( this.loadedTiles )
 		{
+			if( this.levelResetCheckTimer.Update( dt ) ) this.CheckResetLevel()
+			
 			if( mouse.down && this.canClick &&
 				mouse.x >= 0 && mouse.x < this.GetWorldWidth() &&
 				mouse.y >= 0 && mouse.y < this.GetWorldHeight() )
@@ -55,6 +60,10 @@ class WormMap
 			}
 			
 			for( const seal of this.seals ) seal.Update( dt,this )
+			for( const cat of this.cats )
+			{
+				if( cat.Update( dt,this.worms,this,shop ) ) this.CheckResetLevel()
+			}
 		}
 		
 		if( !mouse.down ) this.canClick = true
@@ -80,6 +89,7 @@ class WormMap
 			}
 			
 			for( const seal of this.seals ) seal.Draw( gfx )
+			for( const cat of this.cats ) cat.Draw( gfx )
 		}
 		else
 		{
@@ -151,6 +161,8 @@ class WormMap
 	
 	CheckResetLevel()
 	{
+		this.levelResetCheckTimer.Reset()
+		
 		for( const worm of this.worms )
 		{
 			if( !worm.collected ) return
@@ -193,12 +205,20 @@ class WormMap
 		this.LoadLevel()
 	}
 	
+	SpawnCat()
+	{
+		const maxSpot = this.Tile2WorldPos( this.width,this.height )
+		const randSpot = new Vec2( NekoUtils.RandFloat( 0.0,maxSpot.x ),NekoUtils.RandFloat( 0.0,maxSpot.y ) )
+		this.cats.push( new JumpingCat( randSpot ) )
+	}
+	
 	BreakTile( x,y )
 	{
 		if( this.GetTile( x,y ) > 1 )
 		{
 			--this.tiles[y * this.width + x]
 		}
+		this.CheckResetLevel()
 	}
 	
 	SetTile( x,y,tile )

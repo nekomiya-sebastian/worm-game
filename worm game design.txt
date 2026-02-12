@@ -13,10 +13,7 @@ different level layouts - get x worms to progress to the next level
 "buy" text/green button on top of seal to make it obvious you gotta click it
 upgrade ideas
 	nekosaurus rex that shoots lasers that breaks tiles
-	cat to automatically collect worms for you
-		walks towards worms, either pathfinds or breaks tiles in the way
-			I prefer not breaking tiles since later levels may have really thick layered like stone tiles
-			or dashes to leap on the worm, ignoring any collisions in the way
+	king worm that rarely spawns instead of a regular worm, worth like 10 worms or smth or maybe more
 level ideas
 	fox head level
 

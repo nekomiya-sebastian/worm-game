@@ -48,8 +48,13 @@ class Vec2
 	
 	Set( other )
 	{
-		this.x = other.x
-		this.y = other.y
+		this.SetXY( other.x,other.y )
+	}
+	
+	SetXY( x,y )
+	{
+		this.x = x
+		this.y = y
 	}
 	
 	Copy()
