@@ -10,18 +10,20 @@ class Main
 		
 		// this.worm = new BouncingWorm( this.gfx )
 		
-		this.map = new WormMap( this.gfx )
+		this.levels = new WormLevels()
+		
+		this.map = new WormMap( this.levels )
 		
 		this.shop = new WormShop( this.gfx,this.map,this.numDrawer )
 	}
 	
-	Update()
+	Update( dt )
 	{
-		this.map.Update( this.mouse,this.shop )
+		this.map.Update( this.mouse,this.shop,dt )
 		
 		// this.worm.Update( this.gfx )
 		
-		this.shop.Update( this.mouse )
+		this.shop.Update( this.mouse,dt )
 	}
 	
 	Draw()
@@ -36,9 +38,14 @@ class Main
 
 const delay = 1000.0 / 60.0
 const main = new Main()
+let prevTime = Date.now()
 setInterval( function()
 {
-	main.Update()
+	const now = Date.now()
+	const dt = ( now - prevTime ) / 30
+	prevTime = now
+	
+	main.Update( dt )
 	main.gfx.DrawRect( 0,0,main.gfx.width,main.gfx.height,"#000000" )
 	main.Draw()
 },delay )

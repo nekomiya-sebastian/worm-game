@@ -8,9 +8,9 @@ class Anim
 		this.curFrame = new Counter( sprArr.length )
 	}
 	
-	Update()
+	Update( dt )
 	{
-		if( this.frameTimer.Update() )
+		if( this.frameTimer.Update( dt ) )
 		{
 			this.frameTimer.Reset()
 			if( this.curFrame.Tick() ) this.curFrame.Reset()

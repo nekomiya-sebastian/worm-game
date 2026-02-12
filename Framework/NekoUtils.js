@@ -2,7 +2,11 @@ class NekoUtils {}
 
 NekoUtils.Assert = function( condition,msg )
 {
-	if( !condition ) console.log( msg ? msg : "Assert triggered!" )
+	if( !condition )
+	{
+		console.log( msg ? msg : "Assert triggered!" )
+		// console.trace()
+	}
 }
 
 NekoUtils.RandInt = function( min,max )

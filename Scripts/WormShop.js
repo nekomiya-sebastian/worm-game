@@ -12,11 +12,11 @@ class WormShop
 		this.wormAddAnimUpdateTimer = new Timer( 0.7,true )
 	}
 	
-	Update( mouse )
+	Update( mouse,dt )
 	{
-		if( !this.wormAddAnimUpdateTimer.Update() )
+		if( !this.wormAddAnimUpdateTimer.Update( dt ) )
 		{
-			this.wormCountAnim.Update()
+			this.wormCountAnim.Update( dt )
 		}
 	}
 	

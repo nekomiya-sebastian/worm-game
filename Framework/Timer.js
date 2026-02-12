@@ -7,9 +7,11 @@ class Timer
 		this.dur = delay
 	}
 	
-	Update()
+	Update( dt = -1 )
 	{
-		if( this.time <= this.dur ) ++this.time
+		NekoUtils.Assert( dt > -1,"Invalid dt on timer!" )
+		
+		if( this.time <= this.dur ) this.time += dt
 		
 		return( this.IsDone() )
 	}

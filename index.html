@@ -3,11 +3,29 @@
 <html>
 	<head>
 		<title>worm game</title>
+		
+		<style>
+		body
+		{
+			padding: 0px;
+			margin: 0px;
+		}
+		canvas
+		{
+			display: block;
+			margin: auto;
+			
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+		</style>
+		
 		<!-- framework scripts -->
 		<script src="Framework/Graphics.js"></script>
 		<script src="Framework/Mouse.js"></script>
 		<script src="Framework/Keyboard.js"></script>
-		<script src="Framework/Hitbox.js"></script>
+		<script src="Framework/NekoHitbox.js"></script>
 		<script src="Framework/Button.js"></script>
 		<script src="Framework/Vec2.js"></script>
 		<script src="Framework/Timer.js"></script>
@@ -24,12 +42,15 @@
 		<script src="Scripts/MapWorm.js"></script>
 		<script src="Scripts/WormMap.js"></script>
 		<script src="Scripts/WormShop.js"></script>
+		<script src="Scripts/WormLevels.js"></script>
 	</head>
 	
 	<body>
 		<!-- <canvas id="nekocanv" width="960" height="540"></canvas> -->
 		<!-- <canvas id="nekocanv" width="840" height="600"></canvas> -->
-		<canvas id="nekocanv" width="864" height="576"></canvas>
+		
+		<!-- <canvas id="nekocanv" width="864" height="576"></canvas> -->
+		<canvas id="nekocanv" width="864" height="864"></canvas>
 		
 		<!-- main scr -->
 		<script src="Framework/Main.js"></script>

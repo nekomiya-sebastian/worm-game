@@ -11,7 +11,7 @@ class Graphics
 		this.width = this.canvas.width
 		this.height = this.canvas.height
 		
-		this.sprScale = 4
+		this.sprScale = Graphics.sprScale
 		
 		// console.log( this.width + " " + this.height )
 	}
@@ -41,3 +41,5 @@ class Graphics
 		else this.context.drawImage( sprite.sprite,x,y,sprite.size.x * scale,sprite.size.y * scale )
 	}
 }
+
+Graphics.sprScale = 4

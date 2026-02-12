@@ -1,9 +1,7 @@
 class MapWorm
 {
-	constructor( pos,flipped,wormTile,gfx )
+	constructor( pos,flipped,wormTile )
 	{
-		this.gfx = gfx
-		
 		this.pos = pos
 		this.flipped = flipped
 		this.wormAnim = new Anim( MapWorm.wormSprArr )
@@ -17,7 +15,7 @@ class MapWorm
 		this.covered = true
 	}
 	
-	Update( mouse,canClick,shop )
+	Update( mouse,canClick,shop,dt )
 	{
 		if( this.loaded && !this.covered )
 		{
@@ -35,10 +33,10 @@ class MapWorm
 		{
 			this.loaded = true
 			this.hitbox = new Hitbox( this.pos.x,this.pos.y,
-				this.wormAnim.GetSize().x * this.gfx.sprScale,this.wormAnim.GetSize().y * this.gfx.sprScale )
+				this.wormAnim.GetSize().x * Graphics.sprScale,this.wormAnim.GetSize().y * Graphics.sprScale )
 		}
 		
-		this.wormAnim.Update()
+		this.wormAnim.Update( dt )
 		
 		return( false ) // return true if clicked
 	}
