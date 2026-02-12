@@ -50,6 +50,4 @@ setInterval( function()
 	main.Update( dt )
 	main.gfx.DrawRect( 0,0,main.gfx.width,main.gfx.height,"#000000" )
 	main.Draw()
-	
-	if( main.mouse.touchEnded ) main.gfx.DrawRect( 0,0,90,90,"red" )
 },delay )

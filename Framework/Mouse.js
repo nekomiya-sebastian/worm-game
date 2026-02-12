@@ -10,8 +10,6 @@ class Mouse
 		
 		this.usingTouch = false
 		
-		this.touchEnded = false
-		
 		const self = this
 		
 		canv.addEventListener( "mousedown",function()
@@ -55,15 +53,7 @@ class Mouse
 		{
 			e.preventDefault()
 			
-			// const boundingRect = canv.getBoundingClientRect()
-			// const docElement = document.documentElement
-			// 
-			// self.x = e.touches[0].clientX - boundingRect.left - docElement.scrollLeft
-			// self.y = e.touches[0].clientY - boundingRect.top - docElement.scrollTop
-			
 			self.down = false
-			
-			this.touchEnded = true
 			
 			this.usingTouch = true
 		} )
