@@ -3,8 +3,8 @@ worm game design
 --click to remove tiles & uncover worms
 	pickaxe swing animation for breaking the tiles
 		finger tapping/pinching when picking up worms
-			when you tap the worm it stops animating, then slides up & slowly fades out
-	dirt particle explosion when broken
+			/when you tap the worm it stops animating, then slides up & slowly fades out
+	--dirt particle explosion when broken
 different level layouts - get x worms to progress to the next level
 	--like dirt is arranged in a different way, some tiles take multiple hits to break like stone, etc
 	probably upgrades should be preserved between levels
@@ -12,8 +12,4 @@ different level layouts - get x worms to progress to the next level
 upgrade ideas
 	nekosaurus rex that shoots lasers that breaks tiles
 		or maybe dragon that shoots fireballs at tiles
-	king worm that rarely spawns instead of a regular worm, worth like 10 worms or smth or maybe more
-		higher levels buff spawn chance more - start at 1%, each upgrade adds x% like 10% maybe
-		gives maybe random between 10-100 worms
-			worms explode out as particles when king worm is collected, maybe with golden aura or smth
 

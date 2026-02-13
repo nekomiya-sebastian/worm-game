@@ -13,8 +13,13 @@ class Anim
 		if( this.frameTimer.Update( dt ) )
 		{
 			this.frameTimer.Reset()
-			if( this.curFrame.Tick() ) this.curFrame.Reset()
+			if( this.curFrame.Tick() )
+			{
+				this.curFrame.Reset()
+				return( true )
+			}
 		}
+		return( false )
 	}
 	
 	Draw( pos,gfx,flipped = false )
@@ -38,6 +43,11 @@ class Anim
 		NekoUtils.Assert( frame >= 0 && frame < this.curFrame.GetCount(),
 			"Anim.SetFrame given invalid frame index! " + frame )
 		this.curFrame.SetCurItem( frame )
+	}
+	
+	GetFrame()
+	{
+		return( this.curFrame.GetCurItem() )
 	}
 	
 	GetSize()

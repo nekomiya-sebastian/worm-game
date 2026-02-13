@@ -25,7 +25,13 @@ class WormMap
 		
 		this.levelResetCheckTimer = new Timer( 1.0 )
 		
+		this.pickAnim = new HandAnim( new Anim( Anim.GenSprArr( "Images/Pickaxe",4 ),24 ),
+			new Vec2( 6,12 ).Scale( -1 ) )
+		this.pinchAnim = new HandAnim( new Anim( Anim.GenSprArr( "Images/Pinch",3 ),16 ),
+			new Vec2( 6,10 ).Scale( -1 ) )
+		
 		this.wormDensity = 0.3
+		this.kingWormChance = 0.01
 		this.worms = []
 		
 		this.seals = []
@@ -48,6 +54,9 @@ class WormMap
 					const tilePos = this.World2TilePos( new Vec2( mouse.x,mouse.y ) )
 					this.BreakTile( tilePos.x,tilePos.y )
 					this.canClick = false
+					
+					this.pickAnim.Activate( mouse.x,mouse.y )
+					
 					this.CheckResetLevel()
 				}
 			}
@@ -57,6 +66,9 @@ class WormMap
 				if( worm.Update( mouse,this.canClick,shop,dt ) )
 				{
 					this.canClick = false
+					
+					this.pinchAnim.Activate( mouse.x,mouse.y )
+					
 					this.CheckResetLevel()
 				}
 				if( this.GetTile( worm.wormTile.x,worm.wormTile.y ) == 1 ) worm.Uncover()
@@ -68,6 +80,9 @@ class WormMap
 				if( cat.Update( dt,this.worms,this,shop ) ) this.CheckResetLevel()
 			}
 		}
+		
+		this.pickAnim.Update( dt )
+		this.pinchAnim.Update( dt )
 		
 		if( !mouse.down ) this.canClick = true
 	}
@@ -93,6 +108,9 @@ class WormMap
 			
 			for( const seal of this.seals ) seal.Draw( gfx )
 			for( const cat of this.cats ) cat.Draw( gfx )
+			
+			this.pickAnim.Draw( gfx )
+			this.pinchAnim.Draw( gfx )
 		}
 		else
 		{
@@ -147,8 +165,16 @@ class WormMap
 				{
 					const wormPos = new Vec2( x * this.tileSize.x,y * this.tileSize.y )
 						.Add( this.tileSize.Copy().Divide( 2 ) )
-					this.worms.push( new MapWorm( wormPos,NekoUtils.Choose(),
-						new Vec2( x,y ),this.partSys ) )
+					if( NekoUtils.Chance( this.kingWormChance ) )
+					{
+						this.worms.push( new WormKing( wormPos,NekoUtils.Choose(),
+							new Vec2( x,y ),this.partSys ) )
+					}
+					else
+					{
+						this.worms.push( new MapWorm( wormPos,NekoUtils.Choose(),
+							new Vec2( x,y ),this.partSys ) )
+					}
 				}
 			}
 		}
@@ -214,6 +240,11 @@ class WormMap
 		const maxSpot = this.Tile2WorldPos( this.width,this.height )
 		const randSpot = new Vec2( NekoUtils.RandFloat( 0.0,maxSpot.x ),NekoUtils.RandFloat( 0.0,maxSpot.y ) )
 		this.cats.push( new JumpingCat( randSpot ) )
+	}
+	
+	BuffKingWormChance( chanceBuff )
+	{
+		this.kingWormChance += chanceBuff
 	}
 	
 	BreakTile( x,y )

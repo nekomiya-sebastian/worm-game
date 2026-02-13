@@ -1,6 +1,6 @@
 class WormBuyItem
 {
-	constructor( anim,costs,pos,upgradeInd,additionalSpr = null )
+	constructor( anim,costs,pos,upgradeInd,additional = null )
 	{
 		this.anim = anim
 		this.costs = costs
@@ -10,7 +10,7 @@ class WormBuyItem
 		this.hitbox = null
 		this.pos = pos
 		this.upgradeInd = upgradeInd
-		this.additionalSpr = additionalSpr
+		this.additional = additional
 	}
 	
 	Update( mouse,nWorms,canClick,dt,map )
@@ -66,9 +66,15 @@ class WormBuyItem
 			switch( this.upgradeInd )
 			{
 				case 1: // draw x2 for 2x worm chance upgrade
-					if( this.additionalSpr.loaded )
+					if( this.additional.loaded )
 					{
-						this.additionalSpr.Draw( this.pos.x + gfx.sprScale * 5,this.pos.y,gfx )
+						this.additional.Draw( this.pos.x + gfx.sprScale * 5,this.pos.y,gfx )
+					}
+					break
+				case 3: // draw +10% for worm king
+					if( this.additional.loaded )
+					{
+						this.additional.Draw( this.pos.x + gfx.sprScale * 5,this.pos.y,gfx )
 					}
 					break
 			}
@@ -78,6 +84,7 @@ class WormBuyItem
 	Purchase( map )
 	{
 		const moreWormPercentAdd = 0.2
+		const kingWormChanceBuff = 0.1
 		switch( this.upgradeInd )
 		{
 			case 0:
@@ -88,6 +95,9 @@ class WormBuyItem
 				break
 			case 2:
 				map.SpawnCat()
+				break
+			case 3:
+				map.BuffKingWormChance( kingWormChanceBuff )
 				break
 			default:
 				console.log( "Upgrade " + this.upgradeInd + " undefined!" )
@@ -137,6 +147,13 @@ class WormShop
 				[ 80,900,3000 ],
 				new Vec2( map.tileSize.x * 4.5,gfx.height - map.tileSize.y ),
 				2
+			),
+			new WormBuyItem(
+				new Anim( WormKing.kingSprArr,2 ),
+				[ 100,200,300,400,500,600,700,800,900,1000 ],
+				new Vec2( map.tileSize.x * 6,gfx.height - map.tileSize.y + 2 * Graphics.sprScale ),
+				3,
+				new Sprite( "Images/Plus10.png" )
 			)
 		]
 		
@@ -186,11 +203,12 @@ class WormShop
 		}
 	}
 	
-	GetWorm()
+	GetWorm( amount )
 	{
 		this.wormAddAnimUpdateTimer.Reset()
 		
-		if( this.nWorms < this.maxWorms ) ++this.nWorms
+		this.nWorms += amount
+		if( this.nWorms > this.maxWorms ) this.nWorms = this.maxWorms
 		
 		for( const buyItem of this.buyItems ) buyItem.CheckVisible( this.nWorms )
 	}

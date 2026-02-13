@@ -66,7 +66,7 @@ class MapWorm
 	{
 		if( !this.collected )
 		{
-			shop.GetWorm()
+			shop.GetWorm( this.wormValue )
 			this.collected = true
 			
 			this.partSys.SpawnParts( this.pos,this.wormValue,0 )
