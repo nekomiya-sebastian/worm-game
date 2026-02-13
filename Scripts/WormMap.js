@@ -9,7 +9,8 @@ class WormMap
 			new Sprite( "Images/SkyTile.png" ),
 			new Sprite( "Images/DirtTile.png" ),
 			new Sprite( "Images/GrassTile.png" ),
-			new Sprite( "Images/RockTile.png" )
+			new Sprite( "Images/RockTile.png" ),
+			new Sprite( "Images/BlueBrickTile.png" )
 		]
 		this.tileIndOffset = this.partSys.SetMapSprs( this.tileSprs )
 		
@@ -150,6 +151,8 @@ class WormMap
 		NekoUtils.Assert( level[0].length == this.width,"Invalid level width!" )
 		NekoUtils.Assert( level.length == this.height,"Invalid level height!" )
 		
+		this.worms = []
+		
 		this.tiles = []
 		for( let i = 0; i < this.width * this.height; ++i ) this.tiles.push( 0 )
 		
@@ -187,6 +190,12 @@ class WormMap
 		// console.log( "x: " + x + ", y: " + y + ", width: " + this.width + ", height: " + this.height )
 		
 		this.loadFlip = !this.loadFlip
+	}
+	
+	NextLevel()
+	{
+		this.levels.GotoNextLevel()
+		this.LoadLevel()
 	}
 	
 	CheckResetLevel()
@@ -249,14 +258,15 @@ class WormMap
 	
 	BreakTile( x,y )
 	{
-		if( this.GetTile( x,y ) > 1 )
-		{
-			--this.tiles[y * this.width + x]
-		}
 		const curTile = this.GetTile( x,y )
 		const breakPartCount = 1 * curTile
 		this.partSys.SpawnParts( this.Tile2WorldPos( x,y,true ),
 			breakPartCount,this.tileIndOffset + curTile )
+		
+		if( this.GetTile( x,y ) > 1 )
+		{
+			--this.tiles[y * this.width + x]
+		}
 		
 		this.CheckResetLevel()
 	}

@@ -30,4 +30,9 @@ class Timer
 	{
 		return( this.time > this.dur )
 	}
+	
+	GetPercent()
+	{
+		return( Math.min( 1.0,this.time / this.dur ) )
+	}
 }

@@ -1,15 +1,13 @@
 worm game design
 
---click to remove tiles & uncover worms
-	pickaxe swing animation for breaking the tiles
-		finger tapping/pinching when picking up worms
-			/when you tap the worm it stops animating, then slides up & slowly fades out
-	--dirt particle explosion when broken
 different level layouts - get x worms to progress to the next level
 	--like dirt is arranged in a different way, some tiles take multiple hits to break like stone, etc
 	probably upgrades should be preserved between levels
 "buy" text/green button on top of seal to make it obvious you gotta click it
 upgrade ideas
+	dragon that shoots fireballs at tiles - aoe explosion
+	pickaxe strength upgrade - +1 each time to break 2,3, etc each hit
 	nekosaurus rex that shoots lasers that breaks tiles
-		or maybe dragon that shoots fireballs at tiles
+		lasers pierce through tiles & take 1 level off each of them
 
+next level button - can be done with upgrade menu

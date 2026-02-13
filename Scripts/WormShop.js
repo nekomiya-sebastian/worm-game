@@ -74,7 +74,9 @@ class WormBuyItem
 				case 3: // draw +10% for worm king
 					if( this.additional.loaded )
 					{
-						this.additional.Draw( this.pos.x + gfx.sprScale * 5,this.pos.y,gfx )
+						this.additional.Draw( this.pos.x + gfx.sprScale * 2,
+							this.pos.y + gfx.sprScale * 6,
+							gfx )
 					}
 					break
 			}
@@ -84,7 +86,7 @@ class WormBuyItem
 	Purchase( map )
 	{
 		const moreWormPercentAdd = 0.2
-		const kingWormChanceBuff = 0.1
+		const kingWormChanceBuff = 0.08
 		switch( this.upgradeInd )
 		{
 			case 0:
@@ -99,6 +101,9 @@ class WormBuyItem
 			case 3:
 				map.BuffKingWormChance( kingWormChanceBuff )
 				break
+			case 999:
+				map.NextLevel()
+				break
 			default:
 				console.log( "Upgrade " + this.upgradeInd + " undefined!" )
 				break
@@ -111,6 +116,11 @@ class WormBuyItem
 		{
 			this.show = true
 		}
+	}
+	
+	ShowTut( nWorms )
+	{
+		return( this.show && this.cur == 0 && nWorms >= this.costs[this.cur] )
 	}
 }
 WormBuyItem.upgradeVisiblePercent = 0.5 // if you have cost * this amount you can at least see the upgrade
@@ -128,32 +138,48 @@ class WormShop
 		this.wormCountAnim = new Anim( MapWorm.wormSprArr,12 )
 		this.wormAddAnimUpdateTimer = new Timer( 0.7,true )
 		
+		const xStart = map.tileSize.x * 1
+		const xAdd = map.tileSize.x * 1
+		let curX = 0
+		
+		this.tutActive = true
+		this.tutAnim = new Anim( Anim.GenSprArr( "Images/Tut",2 ),0 )
+		this.tutSpot = new Vec2( xStart,gfx.height - map.tileSize.y - 18 * Graphics.sprScale )
+		this.tutHoverTimer = new Timer( 0.8 )
+		this.tutHoverDist = 8 * Graphics.sprScale
+		
 		this.buyItems = [
 			new WormBuyItem(
 				new Anim( BouncingSeal.sealSprArr,BouncingSeal.sealAnimFPS ),
-				[ 15,30,70,120,350,600,1000 ],
-				new Vec2( map.tileSize.x * 1.5,gfx.height - map.tileSize.y ),
+				[ 15,30,70,110,350,600,1000 ],
+				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
 				0
 			),
 			new WormBuyItem(
 				new Anim( MapWorm.wormSprArr,2 ),
 				[ 50,90,500,2000 ],
-				new Vec2( map.tileSize.x * 3,gfx.height - map.tileSize.y + 5 * Graphics.sprScale ),
+				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y + 5 * Graphics.sprScale ),
 				1,
 				new Sprite( "Images/x2.png" )
 			),
 			new WormBuyItem(
 				new Anim( JumpingCat.idleAnimSprArr ),
 				[ 80,900,3000 ],
-				new Vec2( map.tileSize.x * 4.5,gfx.height - map.tileSize.y ),
+				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
 				2
 			),
 			new WormBuyItem(
 				new Anim( WormKing.kingSprArr,2 ),
-				[ 100,200,300,400,500,600,700,800,900,1000 ],
-				new Vec2( map.tileSize.x * 6,gfx.height - map.tileSize.y + 2 * Graphics.sprScale ),
+				[ 140,700 ],
+				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y + 2 * Graphics.sprScale ),
 				3,
 				new Sprite( "Images/Plus10.png" )
+			),
+			new WormBuyItem(
+				new Anim( Anim.GenSprArr( "Images/NextArrows",2 ) ),
+				[ 100,300,800 ],
+				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
+				999
 			)
 		]
 		
@@ -162,6 +188,12 @@ class WormShop
 	
 	Update( mouse,dt )
 	{
+		if( this.tutActive )
+		{
+			this.tutAnim.SetFrame( mouse.usingTouch ? 1 : 0 )
+			if( this.tutHoverTimer.Update( dt ) ) this.tutHoverTimer.Reset()
+		}
+		
 		if( !this.wormAddAnimUpdateTimer.Update( dt ) )
 		{
 			this.wormCountAnim.Update( dt )
@@ -175,6 +207,7 @@ class WormShop
 			{
 				this.canClick = false
 				this.nWorms -= spent
+				this.tutActive = false
 			}
 		}
 		
@@ -200,6 +233,13 @@ class WormShop
 			}
 			
 			for( const buyItem of this.buyItems ) buyItem.Draw( gfx,this.map,this.numDrawer )
+			
+			if( this.tutActive && this.tutAnim.Loaded() && this.buyItems[0].ShowTut( this.nWorms ) )
+			{
+				this.tutAnim.Draw( this.tutSpot.Copy().Add( Vec2.Up().Scale( this.tutHoverDist *
+					Math.sin( this.tutHoverTimer.GetPercent() * Math.PI ) ) )
+				,gfx )
+			}
 		}
 	}
 	
