@@ -22,6 +22,11 @@ class Anim
 		this.sprs[this.curFrame.GetCurItem()].Draw( pos.x,pos.y,gfx,flipped )
 	}
 	
+	PartDraw( pos,gfx,flipped,scale )
+	{
+		this.sprs[this.curFrame.GetCurItem()].Draw( pos.x,pos.y,gfx,flipped,scale )
+	}
+	
 	Reset()
 	{
 		this.frameTimer.Reset()

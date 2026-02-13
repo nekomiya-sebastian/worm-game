@@ -5,15 +5,15 @@ worm game design
 		finger tapping/pinching when picking up worms
 			when you tap the worm it stops animating, then slides up & slowly fades out
 	dirt particle explosion when broken
--when you clear all the tiles it resets after a moment
-	maybe waits a second before doing this?
-	or maybe you have to press a bit "reset" button?
 different level layouts - get x worms to progress to the next level
-	like dirt is arranged in a different way, some tiles take multiple hits to break like stone, etc
+	--like dirt is arranged in a different way, some tiles take multiple hits to break like stone, etc
+	probably upgrades should be preserved between levels
 "buy" text/green button on top of seal to make it obvious you gotta click it
 upgrade ideas
 	nekosaurus rex that shoots lasers that breaks tiles
+		or maybe dragon that shoots fireballs at tiles
 	king worm that rarely spawns instead of a regular worm, worth like 10 worms or smth or maybe more
-level ideas
-	fox head level
+		higher levels buff spawn chance more - start at 1%, each upgrade adds x% like 10% maybe
+		gives maybe random between 10-100 worms
+			worms explode out as particles when king worm is collected, maybe with golden aura or smth
 

@@ -7,10 +7,11 @@ class Main
 		this.kbd = new Keyboard( this.gfx )
 		
 		this.numDrawer = new NumberDrawer( this.gfx )
+		this.partSys = new ParticleSystem()
 		
 		this.levels = new WormLevels()
 		
-		this.map = new WormMap( this.levels )
+		this.map = new WormMap( this.levels,this.partSys )
 		
 		this.shop = new WormShop( this.gfx,this.map,this.numDrawer )
 	}
@@ -20,6 +21,8 @@ class Main
 		this.map.Update( this.mouse,this.shop,dt,this.gfx )
 		
 		this.shop.Update( this.mouse,dt )
+		
+		this.partSys.Update( this.map,dt )
 	}
 	
 	Draw()
@@ -27,6 +30,8 @@ class Main
 		this.map.Draw( this.gfx )
 		
 		this.shop.Draw( this.gfx )
+		
+		this.partSys.Draw( this.gfx )
 	}
 }
 

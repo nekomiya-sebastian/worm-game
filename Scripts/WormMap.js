@@ -1,14 +1,17 @@
 class WormMap
 {
-	constructor( levels )
+	constructor( levels,partSys )
 	{
 		this.levels = levels
+		this.partSys = partSys
 		
 		this.tileSprs = [
 			new Sprite( "Images/SkyTile.png" ),
 			new Sprite( "Images/DirtTile.png" ),
-			new Sprite( "Images/GrassTile.png" )
+			new Sprite( "Images/GrassTile.png" ),
+			new Sprite( "Images/RockTile.png" )
 		]
+		this.tileIndOffset = this.partSys.SetMapSprs( this.tileSprs )
 		
 		this.tiles = []
 		this.loadedTiles = false
@@ -43,7 +46,7 @@ class WormMap
 				if( curTile > 1 )
 				{
 					const tilePos = this.World2TilePos( new Vec2( mouse.x,mouse.y ) )
-					--this.tiles[tilePos.y * this.width + tilePos.x]
+					this.BreakTile( tilePos.x,tilePos.y )
 					this.canClick = false
 					this.CheckResetLevel()
 				}
@@ -144,7 +147,8 @@ class WormMap
 				{
 					const wormPos = new Vec2( x * this.tileSize.x,y * this.tileSize.y )
 						.Add( this.tileSize.Copy().Divide( 2 ) )
-					this.worms.push( new MapWorm( wormPos,NekoUtils.Choose(),new Vec2( x,y ) ) )
+					this.worms.push( new MapWorm( wormPos,NekoUtils.Choose(),
+						new Vec2( x,y ),this.partSys ) )
 				}
 			}
 		}
@@ -218,6 +222,11 @@ class WormMap
 		{
 			--this.tiles[y * this.width + x]
 		}
+		const curTile = this.GetTile( x,y )
+		const breakPartCount = 1 * curTile
+		this.partSys.SpawnParts( this.Tile2WorldPos( x,y,true ),
+			breakPartCount,this.tileIndOffset + curTile )
+		
 		this.CheckResetLevel()
 	}
 	

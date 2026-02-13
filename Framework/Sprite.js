@@ -26,4 +26,9 @@ class Sprite
 	{
 		gfx.DrawSprite( x,y,this,flipped,scale )
 	}
+	
+	PartDraw( pos,gfx,flipped,scale )
+	{
+		this.Draw( pos.x,pos.y,gfx,flipped,scale )
+	}
 }

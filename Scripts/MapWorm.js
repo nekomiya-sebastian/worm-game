@@ -1,7 +1,9 @@
 class MapWorm
 {
-	constructor( pos,flipped,wormTile )
+	constructor( pos,flipped,wormTile,partSys )
 	{
+		this.partSys = partSys
+		
 		this.pos = pos
 		this.flipped = flipped
 		this.wormAnim = new Anim( MapWorm.wormSprArr )
@@ -11,8 +13,9 @@ class MapWorm
 		this.loaded = false
 		
 		this.collected = false
-		
 		this.covered = true
+		
+		this.wormValue = 1
 	}
 	
 	Update( mouse,canClick,shop,dt )
@@ -65,6 +68,8 @@ class MapWorm
 		{
 			shop.GetWorm()
 			this.collected = true
+			
+			this.partSys.SpawnParts( this.pos,this.wormValue,0 )
 		}
 	}
 }

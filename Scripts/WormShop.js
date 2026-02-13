@@ -112,7 +112,7 @@ class WormShop
 		this.map = map
 		this.numDrawer = numDrawer
 		
-		this.nWorms = 0
+		this.nWorms = 999
 		this.maxWorms = 999999
 		
 		this.wormCountAnim = new Anim( MapWorm.wormSprArr,12 )
