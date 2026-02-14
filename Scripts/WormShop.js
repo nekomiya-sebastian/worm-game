@@ -115,6 +115,9 @@ class WormBuyItem
 			case 5:
 				map.BuffPickStrength()
 				break
+			case 6:
+				map.SpawnNekosaurus()
+				break
 			case 999:
 				map.NextLevel()
 				break
@@ -201,6 +204,12 @@ class WormShop
 				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
 				5,
 				new Sprite( "Images/PlusStr.png" )
+			),
+			new WormBuyItem(
+				new Anim( Nekosaurus.sprArr ),
+				[ 1400,4800,6800,9000,13000 ],
+				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
+				6
 			),
 			new WormBuyItem(
 				new Anim( Anim.GenSprArr( "Images/NextArrows",2 ) ),

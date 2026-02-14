@@ -1,5 +1,5 @@
 worm game design
 
 upgrade ideas
-	nekosaurus rex that shoots lasers that breaks tiles
+	nekosaurus rex that shoots lasers that break tiles
 		lasers pierce through tiles & take 1 level off each of them

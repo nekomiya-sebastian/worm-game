@@ -42,6 +42,8 @@ class WormMap
 		this.cats = []
 		this.dragons = []
 		this.fireballs = []
+		this.nekosaurs = []
+		this.lasers = []
 	}
 	
 	Update( mouse,shop,dt,gfx )
@@ -99,6 +101,20 @@ class WormMap
 					--i
 				}
 			}
+			for( const nekosaur of this.nekosaurs )
+			{
+				const laser = nekosaur.Update( this,dt )
+				if( laser != null ) this.lasers.push( laser )
+			}
+			for( let i = 0; i < this.lasers.length; ++i )
+			{
+				if( this.lasers[i].Update( this,dt ) )
+				{
+					this.lasers[i] = this.lasers[this.lasers.length - 1]
+					this.lasers.pop()
+					--i
+				}
+			}
 		}
 		
 		this.pickAnim.Update( dt )
@@ -127,9 +143,12 @@ class WormMap
 			}
 			
 			for( const dragon of this.dragons ) dragon.Draw( gfx )
+			for( const nekosaur of this.nekosaurs ) nekosaur.Draw( gfx )
 			for( const seal of this.seals ) seal.Draw( gfx )
 			for( const cat of this.cats ) cat.Draw( gfx )
+			
 			for( const fireball of this.fireballs ) fireball.Draw( gfx )
+			for( const laser of this.lasers ) laser.Draw( gfx )
 			
 			this.pickAnim.Draw( gfx )
 			this.pinchAnim.Draw( gfx )
@@ -288,17 +307,25 @@ class WormMap
 		++this.pickStr
 	}
 	
+	SpawnNekosaurus()
+	{
+		const spawnTile = this.GetRandTile()
+		this.nekosaurs.push( new Nekosaurus( this.Tile2WorldPos( spawnTile.x,this.height - 1,true ) ) )
+	}
+	
 	BreakTile( x,y,amount = 1,checkReset = true )
 	{
 		const curTile = this.GetTile( x,y )
-		const breakPartCount = 1 * curTile
-		this.partSys.SpawnParts( this.Tile2WorldPos( x,y,true ),
-			breakPartCount,this.tileIndOffset + curTile )
 		
-		const prevTile = this.GetTile( x,y )
-		if( prevTile > 1 ) this.SetTile( x,y,Math.max( 1,prevTile - amount ) )
-		
-		if( checkReset ) this.CheckResetLevel()
+		if( curTile > 1 )
+		{
+			const breakPartCount = 1 * curTile
+			this.partSys.SpawnParts( this.Tile2WorldPos( x,y,true ),
+				breakPartCount,this.tileIndOffset + curTile )
+			this.SetTile( x,y,Math.max( 1,curTile - amount ) )
+			
+			if( checkReset ) this.CheckResetLevel()
+		}
 	}
 	
 	SetTile( x,y,tile )

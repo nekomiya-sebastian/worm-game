@@ -65,7 +65,7 @@ class Dragon
 	
 	Draw( gfx )
 	{
-		if( this.anim.Loaded() )
+		if( this.loaded )
 		{
 			this.anim.Draw(
 				this.pos.Copy().Subtract( this.anim.GetSize().Copy().Divide( 2 ).Scale( gfx.sprScale ) ),
