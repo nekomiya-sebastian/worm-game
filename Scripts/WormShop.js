@@ -101,6 +101,9 @@ class WormBuyItem
 			case 3:
 				map.BuffKingWormChance( kingWormChanceBuff )
 				break
+			case 4:
+				map.SpawnDragon()
+				break
 			case 999:
 				map.NextLevel()
 				break
@@ -151,7 +154,7 @@ class WormShop
 		this.buyItems = [
 			new WormBuyItem(
 				new Anim( BouncingSeal.sealSprArr,BouncingSeal.sealAnimFPS ),
-				[ 15,30,70,110,350,600,1000 ],
+				[ 15,30,70,110,350,600,1000,1750 ],
 				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
 				0
 			),
@@ -170,10 +173,16 @@ class WormShop
 			),
 			new WormBuyItem(
 				new Anim( WormKing.kingSprArr,2 ),
-				[ 140,700 ],
+				[ 140,700,1600,4000 ],
 				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y + 2 * Graphics.sprScale ),
 				3,
 				new Sprite( "Images/Plus10.png" )
+			),
+			new WormBuyItem(
+				new Anim( Anim.GenSprArr( "Images/DragonSmol",2 ) ),
+				[ 200,800,1500 ],
+				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
+				4
 			),
 			new WormBuyItem(
 				new Anim( Anim.GenSprArr( "Images/NextArrows",2 ) ),
@@ -184,6 +193,8 @@ class WormShop
 		]
 		
 		this.canClick = false
+		
+		for( const buyItem of this.buyItems ) buyItem.CheckVisible( this.nWorms )
 	}
 	
 	Update( mouse,dt )

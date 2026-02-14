@@ -26,10 +26,12 @@ class ParticleSystem
 		this.partScale = 1
 		
 		this.sprs = [
-			new Anim( MapWorm.wormSprArr )
+			new Anim( MapWorm.wormSprArr ),
+			new Sprite( "Images/Fireball.png" )
 		]
 		this.scales = [
-			4
+			4,
+			2
 		]
 		NekoUtils.Assert( this.scales.length == this.sprs.length )
 		this.parts = []

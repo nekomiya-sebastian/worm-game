@@ -37,6 +37,8 @@ class WormMap
 		
 		this.seals = []
 		this.cats = []
+		this.dragons = []
+		this.fireballs = []
 	}
 	
 	Update( mouse,shop,dt,gfx )
@@ -80,6 +82,20 @@ class WormMap
 			{
 				if( cat.Update( dt,this.worms,this,shop ) ) this.CheckResetLevel()
 			}
+			for( const dragon of this.dragons )
+			{
+				const fireball = dragon.Update( this,dt )
+				if( fireball != null ) this.fireballs.push( fireball )
+			}
+			for( let i = 0; i < this.fireballs.length; ++i )
+			{
+				if( this.fireballs[i].Update( this,dt,this.partSys ) )
+				{
+					this.fireballs[i] = this.fireballs[this.fireballs.length - 1]
+					this.fireballs.pop()
+					--i
+				}
+			}
 		}
 		
 		this.pickAnim.Update( dt )
@@ -107,8 +123,10 @@ class WormMap
 				if( this.GetTile( worm.wormTile.x,worm.wormTile.y ) == 1 ) worm.Draw( gfx )
 			}
 			
+			for( const dragon of this.dragons ) dragon.Draw( gfx )
 			for( const seal of this.seals ) seal.Draw( gfx )
 			for( const cat of this.cats ) cat.Draw( gfx )
+			for( const fireball of this.fireballs ) fireball.Draw( gfx )
 			
 			this.pickAnim.Draw( gfx )
 			this.pinchAnim.Draw( gfx )
@@ -251,29 +269,33 @@ class WormMap
 		this.cats.push( new JumpingCat( randSpot ) )
 	}
 	
+	SpawnDragon()
+	{
+		const spawnTile = this.GetRandTile()
+		this.dragons.push( new Dragon( this.Tile2WorldPos( spawnTile.x,spawnTile.y ) ) )
+	}
+	
 	BuffKingWormChance( chanceBuff )
 	{
 		this.kingWormChance += chanceBuff
 	}
 	
-	BreakTile( x,y )
+	BreakTile( x,y,amount = 1,checkReset = true )
 	{
 		const curTile = this.GetTile( x,y )
 		const breakPartCount = 1 * curTile
 		this.partSys.SpawnParts( this.Tile2WorldPos( x,y,true ),
 			breakPartCount,this.tileIndOffset + curTile )
 		
-		if( this.GetTile( x,y ) > 1 )
-		{
-			--this.tiles[y * this.width + x]
-		}
+		const prevTile = this.GetTile( x,y )
+		if( prevTile > 1 ) this.SetTile( x,y,Math.max( 1,prevTile - amount ) )
 		
-		this.CheckResetLevel()
+		if( checkReset ) this.CheckResetLevel()
 	}
 	
 	SetTile( x,y,tile )
 	{
-		NekoUtils.Assert( x >= 0 && x < this.width && y >= 0 && y < this.height,
+		NekoUtils.Assert( this.IsTileOnScreen( x,y ),
 			"Invalid WormMap.SetTile coordinates! " + x + "," + y )
 		
 		this.tiles[y * this.width + x] = tile
@@ -281,10 +303,15 @@ class WormMap
 	
 	GetTile( x,y )
 	{
-		NekoUtils.Assert( x >= 0 && x < this.width && y >= 0 && y < this.height,
+		NekoUtils.Assert( this.IsTileOnScreen( x,y ),
 			"Invalid WormMap.GetTile coordinates! " + x + "," + y )
 		
 		return( this.tiles[y * this.width + x] )
+	}
+	
+	IsTileOnScreen( x,y )
+	{
+		return( x >= 0 && x < this.width && y >= 0 && y < this.height )
 	}
 	
 	GetTileWorld( pos )
@@ -316,5 +343,31 @@ class WormMap
 	GetWorldHeight()
 	{
 		return( this.height * this.tileSize.y )
+	}
+	
+	GetRandTile()
+	{
+		return( new Vec2( NekoUtils.RandInt( 0,this.width ),
+			NekoUtils.RandInt( 0,this.height ) ) )
+	}
+	
+	GetRandTileFilled( forceInvalidTile = false )
+	{
+		const spawnableTiles = []
+		for( let y = 0; y < this.height; ++y )
+		{
+			for( let x = 0; x < this.width; ++x )
+			{
+				if( this.GetTile( x,y ) > 1 ) spawnableTiles.push( new Vec2( x,y ) )
+			}
+		}
+		if( spawnableTiles.length > 0 || forceInvalidTile )
+		{
+			let spawnTile = new Vec2( this.width / 2,this.height / 2 )
+			if( spawnableTiles.length > 0 ) spawnTile = NekoUtils.ArrayChooseRand( spawnableTiles )
+			
+			return( spawnTile )
+		}
+		else return( null )
 	}
 }
