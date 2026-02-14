@@ -31,7 +31,11 @@ class JumpingCat
 			{
 				if( !worm.covered && !worm.collected && worm.loaded )
 				{
-					this.Jump( worm.pos.Copy() )
+					if( !worm.claimed && !this.jumping )
+					{
+						this.Jump( worm.pos.Copy() )
+						worm.claimed = true
+					}
 					
 					if( this.hitbox.Overlaps( worm.hitbox ) )
 					{

@@ -79,6 +79,14 @@ class WormBuyItem
 							gfx )
 					}
 					break
+				case 5: // +pick str
+					if( this.additional.loaded )
+					{
+						this.additional.Draw( this.pos.x + gfx.sprScale * 2,
+							this.pos.y + gfx.sprScale * 9,
+							gfx )
+					}
+					break
 			}
 		}
 	}
@@ -103,6 +111,9 @@ class WormBuyItem
 				break
 			case 4:
 				map.SpawnDragon()
+				break
+			case 5:
+				map.BuffPickStrength()
 				break
 			case 999:
 				map.NextLevel()
@@ -135,7 +146,7 @@ class WormShop
 		this.map = map
 		this.numDrawer = numDrawer
 		
-		this.nWorms = 999
+		this.nWorms = 99999
 		this.maxWorms = 999999
 		
 		this.wormCountAnim = new Anim( MapWorm.wormSprArr,12 )
@@ -154,7 +165,7 @@ class WormShop
 		this.buyItems = [
 			new WormBuyItem(
 				new Anim( BouncingSeal.sealSprArr,BouncingSeal.sealAnimFPS ),
-				[ 15,30,70,110,350,600,1000,1750 ],
+				[ 15,30,70,110,350,600,1000,1750,2500,3350,4200,5500,7000,9500 ],
 				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
 				0
 			),
@@ -167,26 +178,33 @@ class WormShop
 			),
 			new WormBuyItem(
 				new Anim( JumpingCat.idleAnimSprArr ),
-				[ 80,900,3000 ],
+				[ 80,900,3000,5000,9000,14500 ],
 				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
 				2
 			),
 			new WormBuyItem(
 				new Anim( WormKing.kingSprArr,2 ),
-				[ 140,700,1600,4000 ],
+				[ 140,700,1600,4000,8000,20000,50000,90000,160000 ],
 				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y + 2 * Graphics.sprScale ),
 				3,
 				new Sprite( "Images/Plus10.png" )
 			),
 			new WormBuyItem(
 				new Anim( Anim.GenSprArr( "Images/DragonSmol",2 ) ),
-				[ 200,800,1500 ],
+				[ 200,800,1500,2250,3750,5800,10000 ],
 				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
 				4
 			),
 			new WormBuyItem(
+				new Anim( Anim.GenSprArr( "Images/Pickaxe",4 ) ),
+				[ 600,1850,3500,6000 ],
+				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
+				5,
+				new Sprite( "Images/PlusStr.png" )
+			),
+			new WormBuyItem(
 				new Anim( Anim.GenSprArr( "Images/NextArrows",2 ) ),
-				[ 100,300,800 ],
+				[ 100,300,800,2400,4500,6300,7500 ],
 				new Vec2( xStart + xAdd * curX++,gfx.height - map.tileSize.y ),
 				999
 			)

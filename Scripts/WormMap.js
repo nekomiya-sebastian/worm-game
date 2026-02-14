@@ -10,7 +10,9 @@ class WormMap
 			new Sprite( "Images/DirtTile.png" ),
 			new Sprite( "Images/GrassTile.png" ),
 			new Sprite( "Images/RockTile.png" ),
-			new Sprite( "Images/BlueBrickTile.png" )
+			new Sprite( "Images/BlueBrickTile.png" ),
+			new Sprite( "Images/YellowBrickTile.png" ),
+			new Sprite( "Images/MagmaTile.png" )
 		]
 		this.tileIndOffset = this.partSys.SetMapSprs( this.tileSprs )
 		
@@ -26,6 +28,7 @@ class WormMap
 		
 		this.levelResetCheckTimer = new Timer( 1.0 )
 		
+		this.pickStr = 1
 		this.pickAnim = new HandAnim( new Anim( Anim.GenSprArr( "Images/Pickaxe",4 ),24 ),
 			new Vec2( 6,12 ).Scale( -1 ) )
 		this.pinchAnim = new HandAnim( new Anim( Anim.GenSprArr( "Images/Pinch",3 ),16 ),
@@ -55,7 +58,7 @@ class WormMap
 				if( curTile > 1 )
 				{
 					const tilePos = this.World2TilePos( new Vec2( mouse.x,mouse.y ) )
-					this.BreakTile( tilePos.x,tilePos.y )
+					this.BreakTile( tilePos.x,tilePos.y,this.pickStr )
 					this.canClick = false
 					
 					this.pickAnim.Activate( mouse.x,mouse.y )
@@ -269,15 +272,20 @@ class WormMap
 		this.cats.push( new JumpingCat( randSpot ) )
 	}
 	
+	BuffKingWormChance( chanceBuff )
+	{
+		this.kingWormChance += chanceBuff
+	}
+	
 	SpawnDragon()
 	{
 		const spawnTile = this.GetRandTile()
 		this.dragons.push( new Dragon( this.Tile2WorldPos( spawnTile.x,spawnTile.y ) ) )
 	}
 	
-	BuffKingWormChance( chanceBuff )
+	BuffPickStrength()
 	{
-		this.kingWormChance += chanceBuff
+		++this.pickStr
 	}
 	
 	BreakTile( x,y,amount = 1,checkReset = true )

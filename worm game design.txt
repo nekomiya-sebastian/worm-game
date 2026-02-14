@@ -1,8 +1,5 @@
 worm game design
 
 upgrade ideas
-	dragon that shoots fireballs at tiles - aoe explosion
-		fireball doesn't explode on contact, it goes a certain distance before doing aoe
-	pickaxe strength upgrade - +1 each time to break 2,3, etc each hit
 	nekosaurus rex that shoots lasers that breaks tiles
 		lasers pierce through tiles & take 1 level off each of them
