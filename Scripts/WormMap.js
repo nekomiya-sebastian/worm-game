@@ -44,6 +44,22 @@ class WormMap
 		this.fireballs = []
 		this.nekosaurs = []
 		this.lasers = []
+		
+		this.breakTileSFX = [
+			new SFX( "Audio/BreakTile2.mp3",0.7 ),
+			new SFX( "Audio/BreakTile1.mp3",0.3 ),
+			new SFX( "Audio/BreakTile3.mp3",0.3 ),
+			new SFX( "Audio/BreakTile5.mp3",0.25 ),
+			new SFX( "Audio/BreakTile4.mp3",0.35 ),
+			// new SFX( "Audio/BreakTile6.mp3" ),
+		]
+		this.levelLoadSFX = [
+			new SFX( "Audio/Swish1.mp3",0.9 ),
+			new SFX( "Audio/Swish2.mp3",1.0 ),
+			new SFX( "Audio/Swish3.mp3",0.6 ),
+			new SFX( "Audio/Swish4.mp3",0.9 ),
+		]
+		this.firstLoad = true
 	}
 	
 	Update( mouse,shop,dt,gfx )
@@ -230,6 +246,9 @@ class WormMap
 		// console.log( "x: " + x + ", y: " + y + ", width: " + this.width + ", height: " + this.height )
 		
 		this.loadFlip = !this.loadFlip
+		
+		if( this.firstLoad ) this.firstLoad = false
+		else NekoUtils.ArrayChooseRand( this.levelLoadSFX ).Play()
 	}
 	
 	NextLevel()
@@ -324,7 +343,13 @@ class WormMap
 				breakPartCount,this.tileIndOffset + curTile )
 			this.SetTile( x,y,Math.max( 1,curTile - amount ) )
 			
-			if( checkReset ) this.CheckResetLevel()
+			if( checkReset )
+			{
+				// NekoUtils.ArrayChooseRand( this.breakTileSFX ).Play()
+				this.breakTileSFX[curTile - 2].Play()
+				
+				this.CheckResetLevel()
+			}
 		}
 	}
 	

@@ -49,6 +49,8 @@ class Dragon
 				{
 					const targetPos = map.Tile2WorldPos( targetTile.x,targetTile.y,true )
 					
+					NekoUtils.ArrayChooseRand( Dragon.fireballSFX ).Play()
+					
 					return( new Fireball( shotPos,targetPos ) )
 				}
 			}
@@ -87,3 +89,8 @@ class Dragon
 Dragon.sprArr = Anim.GenSprArr( "Images/Dragon",2 )
 Dragon.spd = 5
 Dragon.shotOffsets = [ new Vec2( 17,0 ),new Vec2( 19,5 ) ]
+Dragon.fireballSFX = [
+	new SFX( "Audio/Fireball1.mp3",0.2 ),
+	new SFX( "Audio/Fireball2.mp3",0.2 ),
+	new SFX( "Audio/Fireball3.mp3",0.2 )
+]

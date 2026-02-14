@@ -14,10 +14,19 @@ class Main
 		this.map = new WormMap( this.levels,this.partSys )
 		
 		this.shop = new WormShop( this.gfx,this.map,this.numDrawer )
+		
+		this.bgm = new SFX( "Audio/worm_song.mp3" )
+		this.tapped = false
 	}
 	
 	Update( dt )
 	{
+		if( this.tapped )
+		{
+			if( this.bgm.loaded && !this.bgm.IsPlaying() ) this.bgm.Loop()
+		}
+		else if( this.mouse.down ) this.tapped = true
+		
 		this.map.Update( this.mouse,this.shop,dt,this.gfx )
 		
 		this.shop.Update( this.mouse,dt )

@@ -33,7 +33,9 @@ class Nekosaurus
 						.Copy().Scale( Graphics.sprScale )
 					if( this.lookDir > 0 ) shotOffset.x *= -1
 					const shotPos = this.pos.Copy().Add( shotOffset )
-				
+					
+					NekoUtils.ArrayChooseRand( Nekosaurus.laserSFX ).Play()
+					
 					return( new Laser( shotPos,targetPos ) )
 				}
 			}
@@ -59,3 +61,9 @@ class Nekosaurus
 
 Nekosaurus.sprArr = Anim.GenSprArr( "Images/Nekosaurus",2 )
 Nekosaurus.shotOffsets = [ new Vec2( 9,8 ),new Vec2( 9,2 ) ]
+Nekosaurus.laserSFX = [
+	new SFX( "Audio/Laser1.mp3",0.2 ),
+	new SFX( "Audio/Laser2.mp3",0.2 ),
+	new SFX( "Audio/Laser3.mp3",0.2 ),
+	new SFX( "Audio/Laser4.mp3",0.2 )
+]

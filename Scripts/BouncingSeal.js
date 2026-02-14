@@ -65,12 +65,15 @@ class BouncingSeal
 							else this.moveDir.y = -Math.abs( this.moveDir.y )
 						}
 						
+						this.PlayBounceSFX()
+						
 						map.BreakTile( hitTile.x,hitTile.y )
 						
 						break
 					}
 				}
 			}
+			else this.PlayBounceSFX()
 		}
 		else if( this.sealAnim.Loaded() )
 		{
@@ -97,7 +100,18 @@ class BouncingSeal
 			// gfx.DrawRect( drawPos.x,drawPos.y,this.hSize.x * 2,this.hSize.y * 2,"red" )
 		}
 	}
+	
+	PlayBounceSFX()
+	{
+		NekoUtils.ArrayChooseRand( BouncingSeal.bounceSFX ).Play()
+	}
 }
 
 BouncingSeal.sealSprArr = Anim.GenSprArr( "Images/Seal",4 )
 BouncingSeal.sealAnimFPS = 12
+BouncingSeal.bounceSFX = [
+	new SFX( "Audio/Seal1.mp3",0.1 ),
+	new SFX( "Audio/Seal2.mp3",0.1 ),
+	new SFX( "Audio/Seal3.mp3",0.1 ),
+	new SFX( "Audio/Seal4.mp3",0.1 ),
+]

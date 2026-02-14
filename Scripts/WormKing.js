@@ -29,6 +29,16 @@ class WormKing extends MapWorm
 				gfx,this.flipped )
 		}
 	}
+	
+	PlayPickupSFX()
+	{
+		NekoUtils.ArrayChooseRand( WormKing.SFX ).Play()
+	}
 }
 
 WormKing.kingSprArr = Anim.GenSprArr( "Images/KingWorm",2 )
+WormKing.SFX = [
+	new SFX( "Audio/WormKing1.mp3",0.2 ),
+	new SFX( "Audio/WormKing2.mp3",0.2 ),
+	new SFX( "Audio/WormKing3.mp3",0.2 )
+]

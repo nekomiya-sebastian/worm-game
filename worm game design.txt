@@ -1,5 +1,20 @@
 worm game design
 
-upgrade ideas
-	nekosaurus rex that shoots lasers that break tiles
-		lasers pierce through tiles & take 1 level off each of them
+sfx
+	--break tile - make many of these, maybe even many for each layer or just 1 for each layer
+	--seal hit something (wall/tile)
+	--collect worm
+	--collect king worm
+	--upgrade purchased
+	--dragon shoot fireball
+	pickaxe hit tile
+	--nekosaurus shoot laser
+	--cat jump sfx
+	--sfx for when you uncover the whole level & it resets
+
+king worm might need to drop fewer worm particles cuz it might be kinda overwhelming
+	maybe they drop ( worms / ( spawnChance * 10 ) ) so the higher spawn chance the less visual clutter
+		min of 10
+
+should make sure nekosauri don't spawn on the same tile
+shop should probably be drawn on top of particles

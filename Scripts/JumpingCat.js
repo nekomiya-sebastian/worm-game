@@ -111,9 +111,17 @@ class JumpingCat
 			const velDiv = 400
 			this.vel = targetLoc.Copy().Subtract( this.pos ).Divide( velDiv ).Scale( this.jumpSpd )
 				.Add( new Vec2( 0,-this.jumpUp ) )
+			
+			NekoUtils.ArrayChooseRand( JumpingCat.jumpSFX ).Play()
 		}
 	}
 }
 
 JumpingCat.idleAnimSprArr = Anim.GenSprArr( "Images/Cat",2 )
 JumpingCat.jumpSpr = new Sprite( "Images/Cat3.png" )
+JumpingCat.jumpSFX = [
+	new SFX( "Audio/Jump1.mp3",0.2 ),
+	new SFX( "Audio/Jump2.mp3",0.2 ),
+	new SFX( "Audio/Jump3.mp3",0.2 ),
+	new SFX( "Audio/Jump4.mp3",0.2 ),
+]

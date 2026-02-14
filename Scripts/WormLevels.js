@@ -2,7 +2,7 @@ class WormLevels
 {
 	constructor()
 	{
-		this.curLevel = 7
+		this.curLevel = 0
 		
 		this.levels =
 		[

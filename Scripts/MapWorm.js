@@ -70,9 +70,22 @@ class MapWorm
 			this.collected = true
 			
 			this.partSys.SpawnParts( this.pos,this.wormValue,0 )
+			
+			this.PlayPickupSFX()
 		}
+	}
+	
+	PlayPickupSFX()
+	{
+		NekoUtils.ArrayChooseRand( MapWorm.SFX ).Play()
 	}
 }
 
 MapWorm.wormSprArr = Anim.GenSprArr( "Images/Worm",2 )
 MapWorm.hitboxExpandAmount = 15 * Graphics.sprScale
+MapWorm.SFX = [
+	new SFX( "Audio/Worm1.mp3",0.2 ),
+	new SFX( "Audio/Worm2.mp3",0.2 ),
+	new SFX( "Audio/Worm3.mp3",0.2 ),
+	new SFX( "Audio/Worm4.mp3",0.2 ),
+]

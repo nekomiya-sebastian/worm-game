@@ -95,6 +95,7 @@ class WormBuyItem
 	{
 		const moreWormPercentAdd = 0.2
 		const kingWormChanceBuff = 0.08
+		let defaultUpgradeSFX = true
 		switch( this.upgradeInd )
 		{
 			case 0:
@@ -120,11 +121,15 @@ class WormBuyItem
 				break
 			case 999:
 				map.NextLevel()
+				defaultUpgradeSFX = false
 				break
 			default:
 				console.log( "Upgrade " + this.upgradeInd + " undefined!" )
 				break
 		}
+		
+		NekoUtils.ArrayChooseRand( defaultUpgradeSFX
+			? WormBuyItem.upgradeSFX : WormBuyItem.nextLevelSFX ).Play()
 	}
 	
 	CheckVisible( nWorms )
@@ -141,6 +146,13 @@ class WormBuyItem
 	}
 }
 WormBuyItem.upgradeVisiblePercent = 0.5 // if you have cost * this amount you can at least see the upgrade
+WormBuyItem.upgradeSFX = [
+	new SFX( "Audio/Upgrade1.mp3",0.2 ),
+	new SFX( "Audio/Upgrade2.mp3",0.2 ),
+	new SFX( "Audio/Upgrade3.mp3",0.2 ),
+	new SFX( "Audio/Upgrade4.mp3",0.2 ),
+]
+WormBuyItem.nextLevelSFX = [ new SFX( "Audio/NextLevel.mp3",0.2 ) ]
 
 class WormShop
 {
@@ -149,7 +161,7 @@ class WormShop
 		this.map = map
 		this.numDrawer = numDrawer
 		
-		this.nWorms = 99999
+		this.nWorms = 0
 		this.maxWorms = 999999
 		
 		this.wormCountAnim = new Anim( MapWorm.wormSprArr,12 )
