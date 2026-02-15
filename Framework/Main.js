@@ -53,8 +53,6 @@ setInterval( function()
 	const dt = ( now - prevTime ) / 30
 	prevTime = now
 	
-	if( dt > 5 ) return // prevent rubber banding from tabbing out
-	
 	main.Update( dt )
 	main.gfx.DrawRect( 0,0,main.gfx.width,main.gfx.height,"#000000" )
 	main.Draw()
