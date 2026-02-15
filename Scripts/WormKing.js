@@ -12,10 +12,12 @@ class WormKing extends MapWorm
 	
 	Update( mouse,canClick,shop,dt )
 	{
-		super.Update( mouse,canClick,shop,dt )
+		const result = super.Update( mouse,canClick,shop,dt )
 		
 		if( this.crownLoaded ) this.crownAnim.SetFrame( this.wormAnim.GetFrame() )
 		else if( this.crownAnim.Loaded() ) this.crownLoaded = true
+		
+		return( result )
 	}
 	
 	Draw( gfx )

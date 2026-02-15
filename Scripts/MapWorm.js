@@ -74,7 +74,6 @@ class MapWorm
 			{
 				partAmount = Math.min( 100,
 					Math.floor( Math.max( 10,partAmount / ( WormMap.kingWormChance * 300 ) ) ) )
-				console.log( partAmount )
 			}
 			
 			this.partSys.SpawnParts( this.pos,partAmount,0 )
