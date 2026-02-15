@@ -72,7 +72,9 @@ class MapWorm
 			let partAmount = this.wormValue
 			if( partAmount > 10 )
 			{
-				partAmount = Math.floor( Math.max( 10,partAmount / ( WormMap.kingWormChance * 10 ) ) )
+				partAmount = Math.min( 100,
+					Math.floor( Math.max( 10,partAmount / ( WormMap.kingWormChance * 300 ) ) ) )
+				console.log( partAmount )
 			}
 			
 			this.partSys.SpawnParts( this.pos,partAmount,0 )
