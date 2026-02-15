@@ -12,9 +12,5 @@ sfx
 	--cat jump sfx
 	--sfx for when you uncover the whole level & it resets
 
-king worm might need to drop fewer worm particles cuz it might be kinda overwhelming
-	maybe they drop ( worms / ( spawnChance * 10 ) ) so the higher spawn chance the less visual clutter
-		min of 10
-
-should make sure nekosauri don't spawn on the same tile
-shop should probably be drawn on top of particles
+/music & sfx sliders?
+/ending? idk I think we're fine without it

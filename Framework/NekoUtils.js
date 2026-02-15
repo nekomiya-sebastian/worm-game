@@ -42,3 +42,24 @@ NekoUtils.ArrayIncludes = function( arr,func )
 	}
 	return( false )
 }
+
+NekoUtils.ShuffleArr = function( arr )
+{
+	// the arr.sort method doesn't seem to actually shuffle very well...
+	//  I guess cuz it's sorting not shuffling XD
+	// arr.sort( function( a,b ) { return( Math.random() - 0.5 ) } )
+	
+	// Fisher-Yates shuffle - https://bost.ocks.org/mike/shuffle/
+	let ind = arr.length
+	
+	while( ind > 0 )
+	{
+		const curInd = Math.floor( Math.random() * ind-- )
+		
+		const temp = arr[ind]
+		arr[ind] = arr[curInd]
+		arr[curInd] = temp
+	}
+	
+	return( arr )
+}

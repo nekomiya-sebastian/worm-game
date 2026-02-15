@@ -38,9 +38,9 @@ class Main
 	{
 		this.map.Draw( this.gfx )
 		
-		this.shop.Draw( this.gfx )
-		
 		this.partSys.Draw( this.gfx )
+		
+		this.shop.Draw( this.gfx )
 	}
 }
 

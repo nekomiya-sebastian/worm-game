@@ -35,7 +35,6 @@ class WormMap
 			new Vec2( 6,10 ).Scale( -1 ) )
 		
 		this.wormDensity = 0.3
-		this.kingWormChance = 0.01
 		this.worms = []
 		
 		this.seals = []
@@ -44,6 +43,8 @@ class WormMap
 		this.fireballs = []
 		this.nekosaurs = []
 		this.lasers = []
+		this.nekosaurSpots = []
+		this.loadedNekosaurSpots = false
 		
 		this.breakTileSFX = [
 			new SFX( "Audio/BreakTile2.mp3",0.7 ),
@@ -196,6 +197,13 @@ class WormMap
 		if( this.width - Math.floor( this.width ) > 0 ) console.log( "invalid width!" )
 		if( this.height - Math.floor( this.height ) > 0 ) console.log( "invalid height!" )
 		
+		if( !this.loadedNekosaurSpots )
+		{
+			this.loadedNekosaurSpots = true
+			for( let i = 0; i < this.width; ++i ) this.nekosaurSpots.push( i )
+			NekoUtils.ShuffleArr( this.nekosaurSpots )
+		}
+		
 		this.LoadLevel()
 		
 		this.loadedTiles = true
@@ -224,7 +232,7 @@ class WormMap
 				{
 					const wormPos = new Vec2( x * this.tileSize.x,y * this.tileSize.y )
 						.Add( this.tileSize.Copy().Divide( 2 ) )
-					if( NekoUtils.Chance( this.kingWormChance ) )
+					if( NekoUtils.Chance( WormMap.kingWormChance ) )
 					{
 						this.worms.push( new WormKing( wormPos,NekoUtils.Choose(),
 							new Vec2( x,y ),this.partSys ) )
@@ -312,7 +320,7 @@ class WormMap
 	
 	BuffKingWormChance( chanceBuff )
 	{
-		this.kingWormChance += chanceBuff
+		WormMap.kingWormChance += chanceBuff
 	}
 	
 	SpawnDragon()
@@ -328,8 +336,8 @@ class WormMap
 	
 	SpawnNekosaurus()
 	{
-		const spawnTile = this.GetRandTile()
-		this.nekosaurs.push( new Nekosaurus( this.Tile2WorldPos( spawnTile.x,this.height - 1,true ) ) )
+		const xSpot = ( this.nekosaurSpots.length > 0 ? this.nekosaurSpots.pop() : this.GetRandTile().x )
+		this.nekosaurs.push( new Nekosaurus( this.Tile2WorldPos( xSpot,this.height - 1,true ) ) )
 	}
 	
 	BreakTile( x,y,amount = 1,checkReset = true )
@@ -431,3 +439,5 @@ class WormMap
 		else return( null )
 	}
 }
+
+WormMap.kingWormChance = 0.01

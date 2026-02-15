@@ -69,7 +69,13 @@ class MapWorm
 			shop.GetWorm( this.wormValue )
 			this.collected = true
 			
-			this.partSys.SpawnParts( this.pos,this.wormValue,0 )
+			let partAmount = this.wormValue
+			if( partAmount > 10 )
+			{
+				partAmount = Math.floor( Math.max( 10,partAmount / ( WormMap.kingWormChance * 10 ) ) )
+			}
+			
+			this.partSys.SpawnParts( this.pos,partAmount,0 )
 			
 			this.PlayPickupSFX()
 		}
