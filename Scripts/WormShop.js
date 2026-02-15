@@ -172,10 +172,10 @@ class WormShop
 		let curX = 0
 		
 		this.tutActive = true
-		this.tutAnim = new Anim( Anim.GenSprArr( "Images/Tut",2 ),0 )
-		this.tutSpot = new Vec2( xStart,gfx.height - map.tileSize.y - 18 * Graphics.sprScale )
-		this.tutHoverTimer = new Timer( 0.8 )
-		this.tutHoverDist = 8 * Graphics.sprScale
+		this.tut = new FloatingText( new Anim( Anim.GenSprArr( "Images/Tut",2 ),0 ),
+			new Vec2( xStart,gfx.height - map.tileSize.y - 18 * Graphics.sprScale ),
+			0.8,
+			8 * Graphics.sprScale )
 		
 		this.buyItems = [
 			new WormBuyItem(
@@ -240,8 +240,8 @@ class WormShop
 	{
 		if( this.tutActive )
 		{
-			this.tutAnim.SetFrame( mouse.usingTouch ? 1 : 0 )
-			if( this.tutHoverTimer.Update( dt ) ) this.tutHoverTimer.Reset()
+			this.tut.SetAnimFrame( mouse.usingTouch ? 1 : 0 )
+			this.tut.Update( dt )
 		}
 		
 		if( !this.wormAddAnimUpdateTimer.Update( dt ) )
@@ -284,12 +284,7 @@ class WormShop
 			
 			for( const buyItem of this.buyItems ) buyItem.Draw( gfx,this.map,this.numDrawer )
 			
-			if( this.tutActive && this.tutAnim.Loaded() && this.buyItems[0].ShowTut( this.nWorms ) )
-			{
-				this.tutAnim.Draw( this.tutSpot.Copy().Add( Vec2.Up().Scale( this.tutHoverDist *
-					Math.sin( this.tutHoverTimer.GetPercent() * Math.PI ) ) )
-				,gfx )
-			}
+			if( this.tutActive && this.buyItems[0].ShowTut( this.nWorms ) ) this.tut.Draw( gfx )
 		}
 	}
 	

@@ -61,10 +61,22 @@ class WormMap
 			new SFX( "Audio/Swish4.mp3",0.9 ),
 		]
 		this.firstLoad = true
+		
+		this.basicTutActive = true
+		this.basicTut = new FloatingText( new Anim( Anim.GenSprArr( "Images/TutBasic",2 ) ),new Vec2(
+			864 / 2 - Graphics.sprScale * ( 24 + 18 ),
+			( 864 - 24 ) / 2 - Graphics.sprScale * 22 ),
+			0.8,
+			8 * Graphics.sprScale )
+			
+			
+		this.tutWormLoc = new Vec2( 3,4 )
 	}
 	
 	Update( mouse,shop,dt,gfx )
 	{
+		this.basicTut.Update( dt )
+		
 		if( this.loadedTiles )
 		{
 			if( this.levelResetCheckTimer.Update( dt ) ) this.CheckResetLevel()
@@ -80,6 +92,8 @@ class WormMap
 					this.BreakTile( tilePos.x,tilePos.y,this.pickStr )
 					this.canClick = false
 					
+					if( tilePos.Equals( this.tutWormLoc ) ) this.basicTut.SetAnimFrame( 1 )
+					
 					this.pickAnim.Activate( mouse.x,mouse.y )
 					
 					this.CheckResetLevel()
@@ -91,6 +105,8 @@ class WormMap
 				if( worm.Update( mouse,this.canClick,shop,dt ) )
 				{
 					this.canClick = false
+					
+					this.basicTutActive = false
 					
 					this.pinchAnim.Activate( mouse.x,mouse.y )
 					
@@ -167,6 +183,9 @@ class WormMap
 			for( const fireball of this.fireballs ) fireball.Draw( gfx )
 			for( const laser of this.lasers ) laser.Draw( gfx )
 			
+			if( this.basicTutActive ) this.basicTut.Draw( gfx )
+			
+			
 			this.pickAnim.Draw( gfx )
 			this.pinchAnim.Draw( gfx )
 		}
@@ -228,7 +247,8 @@ class WormMap
 				const curTile = parseInt( line[( this.loadFlip ? line.length - x - 1 : x )] )
 				this.SetTile( x,y,curTile )
 				
-				if( curTile > 1 && NekoUtils.Chance( this.wormDensity ) )
+				if( curTile > 1 && ( NekoUtils.Chance( this.wormDensity ) ) ||
+					( this.firstLoad && x == this.tutWormLoc.x && y == this.tutWormLoc.y ) )
 				{
 					const wormPos = new Vec2( x * this.tileSize.x,y * this.tileSize.y )
 						.Add( this.tileSize.Copy().Divide( 2 ) )
